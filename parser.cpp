@@ -101,3 +101,45 @@ Parser::find_siblings( TreeNode root_node, token_list){
           // ID -> break;
           // default -> error out on unhandled first_token.type; exit
 }
+
+
+
+
+Parser::find_arguments( TreeNode root_node, token_list ){
+
+    // while token_list is not EMPTY
+        // create new node
+        // pop first_token off of token_list
+        // switch on first_token.type
+            // NUMBER ->
+                // if token_list is EMPTY
+                    // set node.nodeType to NUMBER
+                    // set node.typeSpecifier to into
+                    // set node.nValue to int(first_token.value)
+                // else
+                    // pop second_token off of token_list
+                    // switch on second_token.type
+                        // COMMA ->
+                            // set node.type to NUMBER
+                            // set node.typeSpecifier to int
+                            // set node.nValue to int(second_token.value)
+                            // break;
+                        // default -> error out unhandled second_token.type; exit
+                // break;
+            // ID ->
+                // if token_list is EMPTY
+                    // set node.nodeType to VARIABLE
+                    // set node.Svalue to first_token.value
+                // else
+                    // pop second_token off of token_list
+                    // switch on second_token.type
+                        // COMMA ->
+                            //set node.nodeType to VARIABLE
+                            // set node.sValue to first_token.value
+                            // break;
+                        // default -> error out unhandled second_token.type; exit
+                //break;
+            // default -> error out unhandled first_token.type; exit
+        // set root_node.sibling to node
+        // set root_node to node
+}
