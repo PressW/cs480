@@ -1,7 +1,10 @@
+< bolded_words > --> indicate terminals
+  normal_words   --> indicate non-terminals
+
 program               ->      declaration-list
 declaration           ->      declaration-list declaration | declaration
 declaration           ->      var-declaration | fun-declaration
-var-declaration       ->      type-specific <ID> <;> | type-specific ID <[> <NUM> <]> <;>
+var-declaration       ->      type-specific <ID> <;> | type-specific <ID> <[> <NUM> <]> <;>
 type-specifier        ->      int | void
 fun-declaration       ->      type-specifier <ID> <(> params <)> compound-stmt
 params                ->      param-list | <void>
