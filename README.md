@@ -4,11 +4,11 @@ compiler project
 
 ## C-Minus Grammar
 
-1.   program               ->      declaration-list
-2.   declaration           ->      declaration-list declaration | declaration
-3.   declaration           ->      var-declaration | fun-declaration
-4.   var-declaration       ->      type-specific **ID** **;** | type-specific ID **[** **NUM** **]** **;**
-5.   type-specifier        ->      int | void
+1.   program              &nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;     declaration-list
+2.   declaration          &nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;     declaration-list declaration | declaration
+3.   declaration          &nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;      var-declaration | fun-declaration
+4.   var-declaration      &nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;      type-specific **ID** **;** | type-specific ID **[** **NUM** **]** **;**
+5.   type-specifier       &nbsp;&nbsp;&nbsp; -> &nbsp;&nbsp;&nbsp;      int | void
 6.   fun-declaration       ->      type-specifier **ID** **(** params **)** compound-stmt
 7.   params                ->      param-list | **void**
 8.   param-list            ->      param-list **,** param | param
