@@ -434,3 +434,44 @@ Parser::find_statement_list_siblings( root_node, token_list ){
         // set root_node.sibling to node
         // set root_node to node
 }
+
+
+
+
+Parser::build_subtree( root_node, token_list ){
+
+    // switch on root_node.type
+        // PROGRAM -->
+            // call find_siblings(root_node, token_list)
+            // break
+        // PARAMETER_LIST
+            // create new node
+            // set node to root_node
+            // switch on node.typeSpecifier
+                // VOID -> break;
+                // INT -> call find_siblings(root_node, token_list); break
+                // default -> error out on unhandled node.typeSpecifier; exit
+            // break
+        // COMPOUND ->
+            // create root_node.C1 child
+            // set root_node.C1.nodeType to DECLARATION
+                // set keep_going to TRUE
+                // set index to 0
+                // do
+                    // get token at index of token_list
+                    // switch on token.type
+                        // INT -> index += 3; break
+                        // default -> set keep_going to FALSE; break
+                // while keep_going
+                // if index > 0
+                    // call find_siblings(root_node.C1, token_list(from - to index))
+                    // set token_list to token_list(from index+1 to end of token_list)
+            // create root_node.C2 child nodeType
+            // set root_node.C2.nodeType to STATEMENT_LIST
+            // call build_subtree(root_node.C2, token_list)
+            // break
+        // STATEMENT_LIST ->
+            // call find_statement_list_siblings(root_node, token_list)
+            // break
+        // default -> error out on unhandled root_node.nodeType; exit
+}
