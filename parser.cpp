@@ -277,3 +277,160 @@ Parser::find_expression( first_token, root_node, token_list ){
         // set root_node to node
         // set first_token to null
 }
+
+
+
+Parser::find_statement_list_siblings( root_node, token_list ){
+
+    // while token_list is not EMPTY
+        // create new node
+        // pop first_token off of token_list
+        // switch on first_token.type
+            // WRITE ->
+                // set node.nodeType to WRITE
+                // set close_paren to index of RPAREN in token_list
+                // create node.C1 child node
+                // set node.C1.nodeType to EXPRESSION
+                // call find_expression(null, node.C1, token_list(from 1 to close_paren))
+                // set token_list to token_list(from close_paren+1 to end of token_list)
+                // break;
+            // READ ->
+                // set node.nodeType to READ
+                // pop second_token off of token_list
+                // switch on second_token.type
+                    // ID ->
+                        // get third_token from beginning of token_list (not a pop, leave value)
+                        // create new node.C1 child node
+                        // switch on third_token.type
+                            // ID ->
+                                // set node.C1.nodeType to VARIABLE
+                                // set node.C1.nValue to int(second_token.value)
+                                // break;
+                            // LBRACKET
+                                // set node.C1.nodeType to ARRAY
+                                // set node.C1.sValue to second_token.value
+                                // set index to RBRACKET in token_list
+                                // set token_list to token_list(from index to end of token_list)
+                                // break;
+                            // default -> error out on unhandled third_token.type; exit
+                        // break
+                    // default -> error out on unhandled second_token.type; exit
+                // break;
+            // INT ->
+                // create new_token_list
+                // add first_token to beginning of new_token_list
+                // for i < token_list.size
+                    // append token_list[i] to new_token_list
+                // set node.nodeType to compound
+                    // set close_brace to index of RBRACE in new_token_list
+                    // if close_brace is not valid
+                        // set close_brace to end of new_token_list
+                    // call build_subtree(node, new_token_list(from 0 to close_brace))
+                    // set new_token_list to new_token_list(from close_brace to end of new_token_list)
+                // set token_list to new_token_list
+                // break;
+            //RETURN ->
+                // set node.nodeType to RETURN
+                // create node.C1 child node
+                // set indext to index of SEMI in token_list
+                // call find_expression(null, node.C1, token_list(from 0 to index))
+                // set token_list to token_list(from index+1 to end of token_list)
+                // set node.C1 to node.C1.sibling
+                // break
+            // IF ->
+                // set node.nodeType to IF
+                // create node.C1 child node
+                    // set close_paren to index of RPAREN in token_list
+                    // call find_expression(null, node.C1, token_list(from 1 to indext))
+                    // set token_list to token_list(from index+1 to end of token_list)
+                // set node.C1 to node.C1.sibling
+                // create node.C2 child node
+                // set node.C2.nodeType to compound
+                    // set close_brace to index of RBRACE in token_list
+                    // if close_brace is invalid
+                        // set close_brace to end of token_list
+                    // call build_subtree(node.C2, token_list(from 1 to close_brace))
+                // create node.C3 child node
+                // set node.C3.nodeType to compound
+                    // set close_brace to index of RBRACE in token_list
+                    // call build_subtree(node.C3, token_list(from 1 to close_brace))
+                    // set token_list to token_list(from close_brace+1 to end of token_list)
+                // break;
+            // ID ->
+                // pop second_token off token_list
+                // switch on second_token.type
+                    // LBRACKET ->
+                        // set node.nodeType to EXPRESSION
+                        // set index to index of SEMI in token_list
+                        // call find_expression(first_token, node, token_list(from 0 to index))
+                        // set token_list to token_list(from index+1 to end of token_list)
+                        // break
+                    // ASSIGN ->
+                        // set node.nodeType to ASSIGN
+                        // create node.C1 child node
+                        // set node.C1.nodeType to VARIABLE
+                        // set node.C1.sValue to first_token.value
+                        // create node.C2 child node
+                        // set index to index of SEMI from token_list
+                        // call find_expression(first_token, node.C2, token_list(from 0 to index))
+                        // set token_list to token_list(from index + 1 to end of token_list)
+                        // set node.C2 to node.C2.sibling
+                        // break
+                    // LPAREN
+                        // pop the first element off token_list
+                        // set node.nodeType to call
+                        // set node.sValue to first_token.value
+                        // set node.typeSpecifier to INT
+                        // create node.C1 child node
+                        // set node.C1.nodeType to ARGUMENTS
+                        // set close_paren to index of RPAREN in token_list
+                        // if close_paren is not valid
+                            //set close_paren to end of token_list
+                        // call find_arguments(node.C1, token_list(from 0 to close_paren))
+                        // set token_list to token_list(from index + 1 to end of token_list)
+                        // break
+                    // default -> error out on unhandled second_token.type; exit
+                // break
+            // CALL ->
+                // set node.nodeType to call
+                // break
+            // WHILE ->
+                // set node.nodeType to WHILE
+                // create node.C1 child node
+                // set node.C1.nodeType to EXPRESSION
+                    // set close_paren to index of RPAREN in token_list
+                    // call find_expression(null, node.C1, token_list(from 1 to close_paren))
+                    // set token_list to token_list(from close_paren+1 to end of token_list)
+                // set node.C1 to node.C1.sibling
+                // create node.C2 child node
+                // set node.C2.nodeType to STATEMENT_LIST
+                    // set open_brace to index of LBRACE in token_list
+                    // declare close_brace
+                    // find matching braces
+                        // set num_of_open_braces to 1
+                        // set num_of_closed_braces to 0
+                        // index to open_brace
+                        // do
+                            // increment index
+                            // get token from token_list at index
+                            // switch on token.type
+                                // LBRACE ->
+                                    // increment num_of_open_braces
+                                    // break
+                                // RBRACE ->
+                                    // increment num_of_closed_braces
+                                    // break
+                                // default ->
+                                    // break
+                        // while num_of_open_braces != num_of_closed_braces
+                        // set close_brace to index
+                        // increment open_brace
+                    // call build_subtree(node.C2, token_list(from open_brace to close_brace))
+                    // set token_list to token_list(from close_brace+1 to end of token_list)
+                // break
+            // default -> error out on unhandled first_token.type; exit
+        // while token_list is not EMPTY and the next token is SEMI
+            // pop the SEMI off the token_list
+        // set root_node.sibling to node
+        // set root_node to node
+}
