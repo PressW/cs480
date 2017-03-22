@@ -147,10 +147,10 @@ void Parser::find_siblings( Tree_Node *root_node, list<Token> token_list ){
                                         }
                                         else
                                         {
-                                            // set node.C1.typeSpecifier to int
                                             node.C1->typeSpecifier = INT;
-                                            // call build_subtree(node.C1, token_list(from 0 to end_of_C1))
-                                            // set token_list to token_list(from (end_of_C1 + 1) to end of token_list)
+                                            std::list<Token> passed_list;
+                                            std::move( token_list.begin(), right_paren, passed_list.begin() );
+                                            build_subtree( node->C1, passed_list );
                                         }
                                         // set node.C2 to new node
                                         // set node.C2.nodeType to compound
