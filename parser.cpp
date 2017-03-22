@@ -29,18 +29,18 @@ Parser::show_tree( Tree_Node root_node, std::string prefix ){
     // print child 1 (C1) if not null
     if (root_node.C1 != NULL){
         cout << prefix << "C1:";
-        show_tree(root_node.C1, (prefix + indent))
+        show_tree(root_node.C1, (prefix + indent));
     }
 
     // print child 2 (C2) if not null
     if (root_node.C2 != NULL){
         cout << prefix << "C2:";
-        show_tree(root_node.C2, (prefix + indent))
+        show_tree(root_node.C2, (prefix + indent));
     }
 
     // print child 3 (C3) if not null
     if (root_node.sibling != NULL){
-        show_tree(root_node.sibling, prefix)
+        show_tree(root_node.sibling, prefix);
     }
 
 }
@@ -48,82 +48,170 @@ Parser::show_tree( Tree_Node root_node, std::string prefix ){
 
 
 
-Parser::find_siblings( Tree_Node root_node, token_list ){
+Parser::find_siblings( Tree_Node root_node, std::list<Token> token_list ){
 
-  // while token_list is not EMPTY
-      // create new node
-      // pop first_token off of token_list
-      // switch on first_token.type
-          // EOF -> clear token_list; break
-          // COMMA, RBRACKER, RBRACE, SEMI -> break
-          // INT -> set node.nodeType to VARIABLE, set node.typeSpecifier to Intrexon
-          // VOID ->
-              // set node.typeSpecifier to first_token.typeSpecifier
-              // pop second_token off of token_list
-              // switch on second_token.type
-                  // ID ->
-                      // set node.sValue to second_token.values
-                      // if token_list is not empty
-                          // pop third_token off of token_list
-                          // switch on third_token.type
-                              // LBRACKET ->
-                                  // set node.nodeType to Array
-                                  // pop fourth_token off of token_list
-                                  // switch on fourth_token.type
-                                      // NUMBER -> set node.nValue to int(fourth_token.value); break
-                                      // RBRACKET -> break;
-                                      // default -> error out unhandled fourth_token.type; exit
-                                  // set root_node.sibling to node
-                                  // set root_node to node
-                                  // break;
-                              // LPAREN ->
-                                  // set node.nodeType to function
-                                  // set node.C1 to new node
-                                  // set node.C1.nodeType to PARAMETER_LIST
-                                  // set end_of_C1 to index of RPAREN in token_list
-                                  // if end_of_C1 is not valid
-                                      // set node.C1.typeSpecifier to VOID
-                                  // else
-                                      // set node.C1.typeSpecifier to int
-                                      // call build_subtree(node.C1, token_list(from 0 to end_of_C1))
-                                      // set token_list to token_list(from (end_of_C1 + 1) to end of token_list)
-                                  // set node.C2 to new node
-                                  // set node.C2.nodeType to compound
-                                  // set start_of_C2 to index of LBRACKET
-                                  // set end_of_C2 to null
-                                  // find end_of_C2
-                                      // set num_of_open_braces to 1
-                                      // set num_of_closed_braces to 0
-                                      // set index to start_of_C2
-                                      // do
-                                          // increment index
-                                          // get token at token_list[index]
-                                          // switch on token.type
-                                              // LBRACE -> increment num_of_open_braces; break
-                                              // RBRACE -> increment num_of_closed_braces; break
-                                              // default -> break;
-                                      // while
-                                          // num_of_open_braces != num_of_closed_braces
-                                      // set end_of_C2 to index
-                                      // increment start_of_C2
-                                  // call build_subtree(node.C2, token_list(from start_of_C2 to end_of_C2))
-                                  // set token_list to token_list(from (end_of_C2 + 1) to end of token_list)
-                                  // set root_node.sibling to node
-                                  // set root_node to node
-                                  // break;
-                              // RPAREN, COMMA, SEMI ->
-                                  // set root_node.sibling to node
-                                  // set root_node to node
-                                  // break
-                              // default -> error out unhandled third_token.type; exit
-                      // else
-                          // set root_node.sibling to node
-                          // set root_node to node
-                      // break;
-                  // default -> error out on unhandled second_token.type; exit
-          // break;
-          // ID -> break;
-          // default -> error out on unhandled first_token.type; exit
+    // while token_list is not EMPTY
+    while( !token_list.empty() )
+    {
+        Tree_Node node;
+
+        // pop first_token off of token_list and switch on its type
+        Token first_token = token_list.front();
+        token_list.pop_front();
+        switch( first_token.type )
+        {
+
+            case EOF:
+                token_list.clear();
+                break;
+
+            case COMMA:
+            case RBRACKET:
+            case RBRACE:
+            case SEMI:
+            {
+                break;
+            }
+
+            case INT:
+            {
+                node.nodeType = VARIABLE;
+                node.typeSpecifier = INT;
+            }
+
+            case VOID:
+            {
+                node.typeSpecifier = first_token.type;
+                if( !token_list.empty() )
+                {
+                    // pop second_token off of token_list and switch on its type
+                    Token second_token = token_list.front();
+                    token_list.pop_front();
+                    switch( second_token.type )
+                    {
+
+                        case ID:
+                        {
+                            node.sValue = second_token.value;
+                            if( !token_list.empty() )
+                            {
+                                // pop third_token off of token_list and switch on its type
+                                Token third_token = token_list.front();
+                                token_list.pop_front();
+                                switch( third_token.type )
+                                {
+
+                                    case LBRACKET:
+                                    {
+                                        // pop fourth_token off of token_list and switch on its type
+                                        node.nodeType = ARRAY;
+                                        Token fourth_token = token_list.front();
+                                        token_list.pop_front();
+                                        switch( fourth_token.type )
+                                        {
+
+                                            case NUMBER:
+                                            {
+                                                node.nValue = std::stoi( fourth_token.value );
+                                                break;
+                                            }
+
+                                            case RBRACKET:
+                                            {
+                                                break;
+                                            }
+
+                                            default:
+                                            {
+                                              cerr << "ERROR: Unhandled fourth_token type: " << fourth_token.type << endl;
+                                              exit(-1);
+                                            }
+                                        }
+                                        // set sibling pointer without replacing sibling
+                                        root_node.sibling = node;
+                                        root_node = node;
+                                        break;
+                                    }
+                                    // LPAREN ->
+                                    case LPAREN:
+                                    {
+                                        // LPAREN means we are declaring a function
+                                        node.nodeType = FUNCTION;
+                                        node.C1 = new Tree_Node();
+                                        node.C1.nodeType = PARAMETER_LIST;
+                                        // Get iterator pointing to first instance of RPAREN
+                                        std::list<Token>::iterator right_paren = std::find( token_list.begin(), token_list.end(), RPAREN )
+                                        if ( right_paren == token_list.end() )
+                                        {
+                                            node.C1.typeSpecifier = VOID;
+                                        }
+                                        else
+                                        {
+                                            // set node.C1.typeSpecifier to int
+                                            node.C1.typeSpecifier = INT;
+                                            // call build_subtree(node.C1, token_list(from 0 to end_of_C1))
+                                            // set token_list to token_list(from (end_of_C1 + 1) to end of token_list)
+                                        }
+                                        // set node.C2 to new node
+                                        // set node.C2.nodeType to compound
+                                        // set start_of_C2 to index of LBRACKET
+                                        // set end_of_C2 to null
+                                        // find end_of_C2
+                                            // set num_of_open_braces to 1
+                                            // set num_of_closed_braces to 0
+                                            // set index to start_of_C2
+                                            // do
+                                                // increment index
+                                                // get token at token_list[index]
+                                                // switch on token.type
+                                                    // LBRACE -> increment num_of_open_braces; break
+                                                    // RBRACE -> increment num_of_closed_braces; break
+                                                    // default -> break;
+                                            // while
+                                                // num_of_open_braces != num_of_closed_braces
+                                            // set end_of_C2 to index
+                                            // increment start_of_C2
+                                        // call build_subtree(node.C2, token_list(from start_of_C2 to end_of_C2))
+                                        // set token_list to token_list(from (end_of_C2 + 1) to end of token_list)
+                                        // set root_node.sibling to node
+                                        // set root_node to node
+                                        // break;
+                                    }
+                                    // RPAREN, COMMA, SEMI ->
+                                        // set root_node.sibling to node
+                                        // set root_node to node
+                                        // break
+                                    // default -> error out unhandled third_token.type; exit
+                                }
+                            }
+                            // else
+                                // set root_node.sibling to node
+                                // set root_node to node
+                            // break;
+                        }
+
+                        default:
+                        {
+                            cerr << "ERROR: Unhandled second_token type: " << second_token.type << endl;
+                            exit(-1);
+                        }
+                    }
+                }
+            // break;
+            }
+
+            case ID:
+            {
+                break;
+            }
+
+            default:
+            {
+                cerr << "ERROR: Unhandled first_token type: " << first_token.type << endl;
+                exit(-1);
+            }
+        }
+    }
 }
 
 
