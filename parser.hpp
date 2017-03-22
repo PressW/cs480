@@ -1,6 +1,7 @@
 #include "scanner.hpp"
 #include "treenode.hpp"
 #include <list>
+#include <vector>
 using namespace std;
 class Parser{
 
