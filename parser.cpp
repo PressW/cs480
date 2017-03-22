@@ -1,4 +1,5 @@
 #include "Parser.hpp"
+#include <string>
 
 
 Parser::Parser(){
@@ -11,20 +12,43 @@ Parser::~Parser(){
 
 }
 
+
+
+
 // Recursively print AST to standard out
-Parser::show_tree( root_node, String prefix ){
+Parser::show_tree( Tree_Node root_node, std::string prefix ){
 
-  // print node information: type, specifier, sValue, nValue, rename
+    // print node information: type, specifier, sValue, nValue, rename
+    char indent[] = '-';
+    cout << prefix << "Node type: "      << std::to_string(root_node.nodeType)      << endl;
+    cout << prefix << "Type Specifier: " << std::to_string(root_node.typeSpecifier) << endl;
+    cout << prefix << "sValue: "         << root_node.sValue                        << endl;
+    cout << prefix << "nValue: "         << root_node.nValue                        << endl;
+    cout << prefix << "rename: "         << root_node.rename                        << endl;
 
-  // print child 1 (C1) if not null
+    // print child 1 (C1) if not null
+    if (root_node.C1 != NULL){
+        cout << prefix << "C1:";
+        show_tree(root_node.C1, (prefix + indent))
+    }
 
-  // print child 2 (C2) if not null
+    // print child 2 (C2) if not null
+    if (root_node.C2 != NULL){
+        cout << prefix << "C2:";
+        show_tree(root_node.C2, (prefix + indent))
+    }
 
-  // print child 3 (C3) if not null
+    // print child 3 (C3) if not null
+    if (root_node.sibling != NULL){
+        show_tree(root_node.sibling, prefix)
+    }
 
 }
 
-Parser::find_siblings( root_node, token_list ){
+
+
+
+Parser::find_siblings( Tree_Node root_node, token_list ){
 
   // while token_list is not EMPTY
       // create new node
