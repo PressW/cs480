@@ -48,7 +48,7 @@ void Parser::show_tree( Tree_Node *root_node, string prefix ){
 
 
 
-void Parser::find_siblings( Tree_Node *root_node, list<Token> token_list ){
+void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
 
     // while token_list is not EMPTY
     while( !token_list.empty() )
@@ -57,7 +57,7 @@ void Parser::find_siblings( Tree_Node *root_node, list<Token> token_list ){
 
         // pop first_token off of token_list and switch on its type
         Token first_token = token_list.front();
-        token_list.pop_front();
+        token_list.erase( token_list.begin() );
         switch( first_token.type )
         {
 
@@ -86,7 +86,7 @@ void Parser::find_siblings( Tree_Node *root_node, list<Token> token_list ){
                 {
                     // pop second_token off of token_list and switch on its type
                     Token second_token = token_list.front();
-                    token_list.pop_front();
+                    token_list.erase( token_list.begin() );
                     switch( second_token.type )
                     {
 
@@ -97,7 +97,7 @@ void Parser::find_siblings( Tree_Node *root_node, list<Token> token_list ){
                             {
                                 // pop third_token off of token_list and switch on its type
                                 Token third_token = token_list.front();
-                                token_list.pop_front();
+                                token_list.erase( token_list.begin() );
                                 switch( third_token.type )
                                 {
 
@@ -106,7 +106,7 @@ void Parser::find_siblings( Tree_Node *root_node, list<Token> token_list ){
                                         // pop fourth_token off of token_list and switch on its type
                                         node.nodeType = ARRAY;
                                         Token fourth_token = token_list.front();
-                                        token_list.pop_front();
+                                        token_list.erase( token_list.begin() );
                                         switch( fourth_token.type )
                                         {
 
@@ -140,7 +140,7 @@ void Parser::find_siblings( Tree_Node *root_node, list<Token> token_list ){
                                         node.C1 = new Tree_Node();
                                         node.C1->nodeType = PARAMETER_LIST;
                                         // Get iterator pointing to first instance of RPAREN
-                                        std::list<Token>::iterator right_paren = std::find( token_list.begin(), token_list.end(), RPAREN );
+                                        vector<Token>::iterator right_paren = std::find( token_list.begin(), token_list.end(), RPAREN );
                                         if ( right_paren == token_list.end() )
                                         {
                                             node.C1->typeSpecifier = VOID;
@@ -148,46 +148,78 @@ void Parser::find_siblings( Tree_Node *root_node, list<Token> token_list ){
                                         else
                                         {
                                             node.C1->typeSpecifier = INT;
-                                            std::list<Token> passed_list;
+                                            vector<Token> passed_list;
                                             std::move( token_list.begin(), right_paren, passed_list.begin() );
                                             build_subtree( node->C1, passed_list );
                                         }
-                                        // set node.C2 to new node
-                                        // set node.C2.nodeType to compound
-                                        // set start_of_C2 to index of LBRACKET
-                                        // set end_of_C2 to null
-                                        // find end_of_C2
-                                            // set num_of_open_braces to 1
-                                            // set num_of_closed_braces to 0
-                                            // set index to start_of_C2
-                                            // do
-                                                // increment index
-                                                // get token at token_list[index]
-                                                // switch on token.type
-                                                    // LBRACE -> increment num_of_open_braces; break
-                                                    // RBRACE -> increment num_of_closed_braces; break
-                                                    // default -> break;
-                                            // while
-                                                // num_of_open_braces != num_of_closed_braces
-                                            // set end_of_C2 to index
-                                            // increment start_of_C2
-                                        // call build_subtree(node.C2, token_list(from start_of_C2 to end_of_C2))
-                                        // set token_list to token_list(from (end_of_C2 + 1) to end of token_list)
-                                        // set root_node.sibling to node
-                                        // set root_node to node
-                                        // break;
+                                        node->C2 = new Tree_Node();
+                                        node->C2->nodeType = PARAMETER_LIST;
+                                        // Get iterator pointing to first instance of LBRACE
+                                        vector<Token>::iterator open_brace = std::find( token_list.begin(), token_list.end(), LBRACE );
+                                        {
+                                            int num_of_open_braces = 1;
+                                            int num_of_closed_braces = 0;
+                                            vector<Token>::iterator close_brace;
+                                            vector<Token>::iterator index = open_brace;
+                                            do
+                                            {
+                                                index += 1;
+                                                Token token = token_list.at( index );
+                                                switch( token.type )
+                                                {
+                                                    case LBRACE:
+                                                    {
+                                                        num_of_open_braces += 1;
+                                                        break;
+                                                    }
+
+                                                    case RBRACE:
+                                                    {
+                                                        num_of_closed_braces += 1;
+                                                        break;
+                                                    }
+
+                                                    default:
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            while ( num_of_open_braces != num_of_closed_braces );
+                                            close_brace = index;
+                                            // skip the opening brace {
+                                            open_brace += 1;
+                                        }
+                                        vector<Token> passed_list;
+                                        std::move( open_brace, close_brace, passed_list.begin() );
+                                        build_subtree( node->C2, passed_list );
+                                        root_node->sibling = node;
+                                        root_node = node;
+                                        break;
                                     }
-                                    // RPAREN, COMMA, SEMI ->
-                                        // set root_node.sibling to node
-                                        // set root_node to node
-                                        // break
-                                    // default -> error out unhandled third_token.type; exit
+
+                                    case RPAREN:
+                                    case COMMA:
+                                    case SEMI:
+                                    {
+                                        root_node->sibling = node;
+                                        root_node = node;
+                                        break;
+                                    }
+
+                                    default:
+                                    {
+                                        cerr << "ERROR: Unhandled third_token type: " << third_token.type << endl;
+                                        exit(-1);
+                                    }
                                 }
                             }
-                            // else
-                                // set root_node.sibling to node
-                                // set root_node to node
-                            // break;
+                            else
+                            {
+                                root->sibling = node;
+                                root_node = node;
+                            }
+                            break;
                         }
 
                         default:
@@ -197,7 +229,7 @@ void Parser::find_siblings( Tree_Node *root_node, list<Token> token_list ){
                         }
                     }
                 }
-            // break;
+                break;
             }
 
             case ID:
