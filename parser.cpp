@@ -56,7 +56,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
         Tree_Node node;
 
         // pop first_token off of token_list and switch on its type
-        Token first_token = token_list.at( token_list.begin() );
+        Token first_token = token_list.at( 0 );
         token_list.erase( token_list.begin() );
         switch( first_token.type )
         {
@@ -85,7 +85,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                 if( !token_list.empty() )
                 {
                     // pop second_token off of token_list and switch on its type
-                    Token second_token = token_list.at( token_list.begin() );
+                    Token second_token = token_list.at( 0 );
                     token_list.erase( token_list.begin() );
                     switch( second_token.type )
                     {
@@ -96,7 +96,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                             if( !token_list.empty() )
                             {
                                 // pop third_token off of token_list and switch on its type
-                                Token third_token = token_list.at( token_list.begin() );
+                                Token third_token = token_list.at( 0 );
                                 token_list.erase( token_list.begin() );
                                 switch( third_token.type )
                                 {
@@ -105,7 +105,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                                     {
                                         // pop fourth_token off of token_list and switch on its type
                                         node.nodeType = ARRAY;
-                                        Token fourth_token = token_list.at( token_list.begin() );
+                                        Token fourth_token = token_list.at( 0 );
                                         token_list.erase( token_list.begin() );
                                         switch( fourth_token.type )
                                         {
@@ -164,7 +164,13 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                                             do
                                             {
                                                 index += 1;
-                                                Token token = token_list.at( index );
+                                                int position = std::distance( token_list.begin(), index )
+                                                if( position == token_list.size() )
+                                                {
+                                                    cerr << "ERROR: Parenthesis mismatch" << endl;
+                                                    exit(-1);
+                                                }
+                                                Token token = token_list.at( position );
                                                 switch( token.type )
                                                 {
                                                     case LBRACE:
@@ -254,7 +260,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token> token_list ){
     while( !token_list.empty() )
     {
         Trea_Node node;
-        Token first_token = token_list.at( token_list.begin() );
+        Token first_token = token_list.at( 0 );
         token_list.erase( token_list.begin() );
         switch( first_token.type )
         {
@@ -269,7 +275,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token> token_list ){
                 }
                 else
                 {
-                    Token second_token = token_list.at( token_list.begin() );
+                    Token second_token = token_list.at( 0 );
                     token_list.erase( token_list.begin() );
                     switch( second_token.type )
                     {
@@ -301,7 +307,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token> token_list ){
                 }
                 else
                 {
-                    Token second_token = token_list.at( token_list.begin() );
+                    Token second_token = token_list.at( 0 );
                     token_list.erase( token_list.begin() );
                     switch( second_token.type )
                     {
@@ -337,9 +343,17 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token> token_list ){
 void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token> token_list ){
 
     // while token_list is not EMPTY
+    while( !token_list.empty() )
+    {
         // if starting_token is null
-            // pop first_token off of token_list
+        if( first_token == NULL )
+        {
+            Token first_token = token_list.at( 0 );
+            token_list.erase( token_list.begin() );
+        }
         // create new node
+        Tree_Node node = new Tree_Node();
+
         // set node.nodeType to EXPRESSIOn
         // create node.C1 child node
         // set node.C1.sValue to first_token.value
@@ -464,6 +478,7 @@ void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token
         // set root_node.sibling to node
         // set root_node to node
         // set first_token to null
+    }
 }
 
 
