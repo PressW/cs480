@@ -150,10 +150,10 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                                             node.C1->typeSpecifier = INT;
                                             vector<Token> passed_list;
                                             std::move( token_list.begin(), right_paren, passed_list.begin() );
-                                            build_subtree( node->C1, passed_list );
+                                            build_subtree( node.C1, passed_list );
                                         }
-                                        node->C2 = new Tree_Node();
-                                        node->C2->nodeType = PARAMETER_LIST;
+                                        node.C2 = new Tree_Node();
+                                        node.C2->nodeType = PARAMETER_LIST;
                                         // Get iterator pointing to first instance of LBRACE
                                         vector<Token>::iterator open_brace = std::find( token_list.begin(), token_list.end(), LBRACE );
                                         {
