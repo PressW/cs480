@@ -1,6 +1,9 @@
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 enum CONSTANTS {
-	EOF,
 	ERROR,
 	ELSE,
 	IF,
@@ -49,9 +52,17 @@ enum CONSTANTS {
 
 
 class Token {
+	
 	public:
-		Token();
+		int type;
+		string name;
+		
+		Token(int type);
+		Token(int type, string value);
+		string toStr();
+		bool operator==(Token t);
 		~Token();
+
 	private:
 
 };
