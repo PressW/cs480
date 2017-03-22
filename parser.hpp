@@ -1,11 +1,18 @@
-#include "Scanner.hpp"
-
-
+#include "scanner.hpp"
+#include "treenode.hpp"
+#include <list>
+using namespace std;
 class Parser{
 
 	public:
 		Parser();
 		~Parser();
+		void show_tree(Tree_Node *root_node,string prefix);
+		void find_siblings(Tree_Node *root_node, list<Token> token_list);
+		void find_arguments(Tree_Node root_node, list<Token> token_list);
+		void find_expression(Token first_token, Tree_Node *root_node, list<Token> toke_list);
+		void find_statement_list_siblings(Tree_Node root_node, list<Token> token_list);
+		void build_subtree(Tree_Node root_node, list<Token> token_list);
 
 	private:
 };

@@ -1,4 +1,4 @@
-#include "Parser.hpp"
+#include "parser.hpp"
 #include <string>
 
 
@@ -16,31 +16,31 @@ Parser::~Parser(){
 
 
 // Recursively print AST to standard out
-Parser::show_tree( Tree_Node root_node, std::string prefix ){
+void Parser::show_tree( Tree_Node *root_node, string prefix ){
 
     // print node information: type, specifier, sValue, nValue, rename
-    char indent[] = '-';
-    cout << prefix << "Node type: "      << std::to_string(root_node.nodeType)      << endl;
-    cout << prefix << "Type Specifier: " << std::to_string(root_node.typeSpecifier) << endl;
-    cout << prefix << "sValue: "         << root_node.sValue                        << endl;
-    cout << prefix << "nValue: "         << root_node.nValue                        << endl;
-    cout << prefix << "rename: "         << root_node.rename                        << endl;
+    char indent[] = "-";
+    cout << prefix << "Node type: "      << std::to_string(root_node->nodeType)      << endl;
+    cout << prefix << "Type Specifier: " << std::to_string(root_node->typeSpecifier) << endl;
+    cout << prefix << "sValue: "         << root_node->sValue                        << endl;
+    cout << prefix << "nValue: "         << root_node->nValue                        << endl;
+    cout << prefix << "rename: "         << root_node->rename                        << endl;
 
     // print child 1 (C1) if not null
-    if (root_node.C1 != NULL){
+    if (root_node->C1 != NULL){
         cout << prefix << "C1:";
-        show_tree(root_node.C1, (prefix + indent));
+        show_tree(root_node->C1, (prefix + indent));
     }
 
     // print child 2 (C2) if not null
-    if (root_node.C2 != NULL){
+    if (root_node->C2 != NULL){
         cout << prefix << "C2:";
-        show_tree(root_node.C2, (prefix + indent));
+        show_tree(root_node->C2, (prefix + indent));
     }
 
     // print child 3 (C3) if not null
-    if (root_node.sibling != NULL){
-        show_tree(root_node.sibling, prefix);
+    if (root_node->sibling != NULL){
+        show_tree(root_node->sibling, prefix);
     }
 
 }
@@ -48,7 +48,7 @@ Parser::show_tree( Tree_Node root_node, std::string prefix ){
 
 
 
-Parser::find_siblings( Tree_Node root_node, std::list<Token> token_list ){
+void Parser::find_siblings( Tree_Node *root_node, list<Token> token_list ){
 
     // while token_list is not EMPTY
     while( !token_list.empty() )
@@ -128,8 +128,8 @@ Parser::find_siblings( Tree_Node root_node, std::list<Token> token_list ){
                                             }
                                         }
                                         // set sibling pointer without replacing sibling
-                                        root_node.sibling = node;
-                                        root_node = node;
+                                        root_node->sibling = &node;
+                                        root_node = &node;
                                         break;
                                     }
                                     // LPAREN ->
@@ -138,17 +138,17 @@ Parser::find_siblings( Tree_Node root_node, std::list<Token> token_list ){
                                         // LPAREN means we are declaring a function
                                         node.nodeType = FUNCTION;
                                         node.C1 = new Tree_Node();
-                                        node.C1.nodeType = PARAMETER_LIST;
+                                        node.C1->nodeType = PARAMETER_LIST;
                                         // Get iterator pointing to first instance of RPAREN
-                                        std::list<Token>::iterator right_paren = std::find( token_list.begin(), token_list.end(), RPAREN )
+                                        std::list<Token>::iterator right_paren = std::find( token_list.begin(), token_list.end(), RPAREN );
                                         if ( right_paren == token_list.end() )
                                         {
-                                            node.C1.typeSpecifier = VOID;
+                                            node.C1->typeSpecifier = VOID;
                                         }
                                         else
                                         {
                                             // set node.C1.typeSpecifier to int
-                                            node.C1.typeSpecifier = INT;
+                                            node.C1->typeSpecifier = INT;
                                             // call build_subtree(node.C1, token_list(from 0 to end_of_C1))
                                             // set token_list to token_list(from (end_of_C1 + 1) to end of token_list)
                                         }
@@ -217,7 +217,7 @@ Parser::find_siblings( Tree_Node root_node, std::list<Token> token_list ){
 
 
 
-Parser::find_arguments( root_node, token_list ){
+void Parser::find_arguments(Tree_Node root_node, list<Token> token_list ){
 
     // while token_list is not EMPTY
         // create new node
@@ -258,7 +258,7 @@ Parser::find_arguments( root_node, token_list ){
 
 
 
-Parser::find_expression( first_token, root_node, token_list ){
+void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token> token_list ){
 
     // while token_list is not EMPTY
         // if starting_token is null
@@ -392,7 +392,7 @@ Parser::find_expression( first_token, root_node, token_list ){
 
 
 
-Parser::find_statement_list_siblings( root_node, token_list ){
+void Parser::find_statement_list_siblings(Tree_Node root_node, list<Token> token_list ){
 
     // while token_list is not EMPTY
         // create new node
@@ -550,7 +550,7 @@ Parser::find_statement_list_siblings( root_node, token_list ){
 
 
 
-Parser::build_subtree( root_node, token_list ){
+void Parser::build_subtree(Tree_Node root_node, list<Token> token_list ){
 
     // switch on root_node.type
         // PROGRAM -->

@@ -3,17 +3,17 @@
 
 Token::Token(int type){
     this->type = type;
-    this->name = "";
+    this->value = "";
 }
-Token::Token(int type, string name){
+Token::Token(int type, string value){
     this->type = type;
-    this->name = name;
+    this->value = value;
 }
 string Token::toStr(){
-    return this->name;
+    return this->value;
 }
 bool Token::operator==(Token t){
-    if (this->type == t.type && this->name == t.name){
+    if (this->type == t.type && this->value == t.value){
         return true;
     }
     else {
