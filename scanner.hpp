@@ -12,6 +12,8 @@ using namespace std;
 class Scanner{
 
 	public:
+		int currentLine = 0;
+		int posLine = 0;
 		string filename;
 		ifstream file;
 		vector<vector<Token*> > all_tokens;
@@ -19,6 +21,7 @@ class Scanner{
 		Scanner(string filename);
 		~Scanner();
 		Token* stringToToken(string tokenString);
+		Token* getToken();
 	private:
 		
 };

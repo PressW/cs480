@@ -97,7 +97,7 @@ Scanner::Scanner(string filename){
 }
 Token* Scanner::stringToToken(string tokenString){
     // Token *result = new Token(ERROR,"error");
-    cout << "Token found: " << tokenString << endl;
+    //cout << "Token found: " << tokenString << endl;
     if (regex_match(tokenString,regex("[0-9]+[.]?[0-9]*$"))){
         return new Token(NUMBER, tokenString);
     }
@@ -168,6 +168,30 @@ Token* Scanner::stringToToken(string tokenString){
         }
     }
 
+}
+
+Token* Scanner::getToken(){
+    Token *result = NULL;
+    if (this->currentLine >= all_tokens.size()){
+        return new Token(EOF,"");
+    }
+    vector<Token*> tokenLine = all_tokens.at(this->currentLine);
+    while (this->posLine >= tokenLine.size()){
+        this->posLine = 0;
+        this->currentLine++;
+        tokenLine = all_tokens.at(this->currentLine);
+        if (this->currentLine >= all_tokens.size()){
+            return new Token(EOF,"");
+        }
+    }
+    result = tokenLine.at(this->posLine);
+    this->posLine++;
+    if (this->posLine >= tokenLine.size()){
+        this->posLine = 0;
+        this->currentLine++;
+    }
+    cout << "Token: " << result->value << endl;
+    return result;
 }
 Scanner::~Scanner(){
     file.close();
