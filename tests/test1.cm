@@ -1,0 +1,18 @@
+void main ( void ){
+	int x;
+	int y;
+	
+	read x;
+
+	while ( x != 1 ) {
+		write x;
+		y = x / 2;
+
+		if ( 2 * y == x )
+			x = x / 2;
+
+		else
+			x = 3 * x + 1;
+	
+	}
+}

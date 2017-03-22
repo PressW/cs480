@@ -1,0 +1,48 @@
+void main( void ) {
+	int x;
+	int y;
+	int z;
+
+	read x;
+	read y;
+	read z;
+
+	if ( x < y ) {
+		if ( x < z ) {
+			if ( y < z ) {
+				write x;
+				write y;
+				write z;
+			}
+			else {
+				write x;
+				write z;
+				write y;
+			}
+		}
+		else {
+			write z;
+			write x;
+			write y;
+		}
+	}
+	else {
+		if ( x < z ) {
+			write y;
+			write x;
+			write z;
+		}
+		else {
+			if ( y < z ) {
+				write y;
+				write z;
+				write x;
+			}
+			else {
+				write z;
+				write y;
+				write x;
+			}
+		}
+	}
+}

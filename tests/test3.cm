@@ -1,0 +1,19 @@
+int x[5];
+int y[15];
+int z[10];
+
+void f( int a[], int b[], int c[] ) {
+
+	a[ 2 ] = 111;
+	b[ 9 ] = 222;
+	c[ 4 ] = 333;
+}
+
+
+void main( void ) {
+	f(x, y, z);
+	write x[ 2 ];
+	write y[ 9 ];
+	write z[ 4 ];
+
+}
