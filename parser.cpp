@@ -12,7 +12,7 @@ Parser::~Parser(){
 }
 
 // Recursively print AST to standard out
-Parser::show_tree( TreeNode root_node, String prefix ){
+Parser::show_tree( root_node, String prefix ){
 
   // print node information: type, specifier, sValue, nValue, rename
 
@@ -24,7 +24,7 @@ Parser::show_tree( TreeNode root_node, String prefix ){
 
 }
 
-Parser::find_siblings( TreeNode root_node, token_list){
+Parser::find_siblings( root_node, token_list ){
 
   // while token_list is not EMPTY
       // create new node
@@ -105,7 +105,7 @@ Parser::find_siblings( TreeNode root_node, token_list){
 
 
 
-Parser::find_arguments( TreeNode root_node, token_list ){
+Parser::find_arguments( root_node, token_list ){
 
     // while token_list is not EMPTY
         // create new node
@@ -142,4 +142,138 @@ Parser::find_arguments( TreeNode root_node, token_list ){
             // default -> error out unhandled first_token.type; exit
         // set root_node.sibling to node
         // set root_node to node
+}
+
+
+
+Parser::find_expression( first_token, root_node, token_list ){
+
+    // while token_list is not EMPTY
+        // if starting_token is null
+            // pop first_token off of token_list
+        // create new node
+        // set node.nodeType to EXPRESSIOn
+        // create node.C1 child node
+        // set node.C1.sValue to first_token.value
+        // switch on first_token.value
+            // NUMBER ->
+                // set node.C1.nodeType to NUMBER
+                // set node.C1.nodeType to into
+                // set node.C1.nValue to int(first_token.value)
+                // break;
+            // ID ->
+                // set node.C1.nodeType to VARIABLE
+                // if token_list is not EMPTY
+                    // pop second_token off of token_list
+                    // switch on second_token.type
+                        // LBRACKET ->
+                            // set node.C1.nodeType to ARRAY
+                            // pop third_token off of token_list
+                            // switch on third_token.type
+                                // INT ->
+                                    // set node.C1.nValue to int(third_token.value)
+                                    // ?? pops anoter token off the top ??
+                                    // break;
+                                // ID ->
+                                    // set index to SEMI in token_list
+                                    // if index is not validating
+                                        // set index to end of token_list
+                                    // call find_expression(third_token, node.C1, token_list(from 1 to index))
+                                    // set node.C1 to node.C1.sibling
+                                    // set token_list to token_list(from index to end of token_list)
+                                    // break
+                                // default -> error out on unhandled third_token.type; exit
+                            // break;
+                        // MINUS ->
+                            // set node.nodeType to minutes
+                            // create node.C2 child node
+                            // set index to MINUS in token_list
+                            // if index is not valid
+                                //set index to end of token_list
+                            // call find_expression(null, node.C2, token_list)
+                            // set token_list to token_list(from index to end of token_list)
+                            // set node.C2 to node.C2.sibling
+                            // break;
+                        // LS ->
+                            // set node.nodeType to LS
+                            // create node.C2 child node
+                            // set index to SEMI in token_list
+                            // if index is not valid
+                                // set index to end of token_list
+                            // call find_expression(null, node.C2, token_list)
+                            // set token_list to token_list(from index to end of token_list)
+                            // set node.C2 to node.C2.sibling
+                            // break;
+                        // ASSIGN ->
+                            // pop third_token off of token_list
+                            // switch on third_token.type
+                                // NUMBER ->
+                                    // set node.nodeType to assign
+                                    // create node.C2 child node
+                                    // set node.C2.nodeType to NUMBER
+                                    // set node.C2.typeSpecifier to INT
+                                    // set node.C2.nValue to int(third_token.value)
+                                    // break;
+                                // ID ->
+                                    // create node.C2 child node
+                                    // if token_list is EMPTY
+                                        // set node.C2.nodeType to VARIABLE
+                                        // set node.C2.sValue to third_token.value
+                                    // else
+                                        // pop fourth_token off of token_list
+                                        // switch on fourth_token.type
+                                            // LPAREN ->
+                                                // set node.C2.nodeType to Call
+                                                // set node.C2.sValue to third_token.value
+                                                // set node.C2.typeSpecifier to INT
+                                                // create new node.C2.C1 child node
+                                                // set node.C2.C1.nodeType to ARGUMENTS
+                                                // set index to RPAREN in token_list
+                                                // if index is not valid
+                                                    // set index to end of token_list
+                                                // call find_arguments( node.C2.C1, token_list(from 0 to index))
+                                                // set node.C2.C1 to node.C2.C1.sibling
+                                                // set token_list to token_list(from index+1 to end of token_list)
+                                                // break
+                                            // SEMI ->
+                                                // set node.C2.nodeType to VARIABLE
+                                                // set node.C2.sValue to third_token.value
+                                                // break
+                                            // LBRACKET ->
+                                                // set node.C2.nodeType to ARRAY
+                                                // set node.C2.sValue to third_token.value
+                                                // create new node.C2.C1 child node
+                                                // set indext to RBRACKET in token_list
+                                                // call find_expression(null, node.C2.C1, token_list(from 0 to index))
+                                                // set node.C2.C1 to node.C2.C1.sibling
+                                                // set token_list to token_list(from index+1 to end of token_list)
+                                                // break
+                                            // PLUS ->
+                                                // set node.C2.nodeType to Plus
+                                                // set node.C2.C1 to node
+                                                // set new temp_node to node.C2
+                                                // set node.C2 to null
+                                                // set node to temp_node
+                                                // create new node.C2 child node
+                                                    // set index to end of token_list
+                                                    // call find_expression(null, node.C2, token_list(from 0 to index))
+                                                    // set token_list to token_list(from index to end of token_list)
+                                                // set node.C2 to node.C2.sibling
+                                                // if node.C1.typeSpecifier is EXPRESSION AND node.C1.C1 is not null and node.C1.C2 is null
+                                                    // set node.C1 to node.C1.C1
+                                                // if node.C2.typeSpecifier is EXPRESSION AND node.C2.C1 is not null and node.C2.C2 is null
+                                                    // set node.C2 = node.C2.C1
+                                                // breakout
+                                            // default -> error out on unhandled fourth_token.type; exit
+                                    // break
+                                // default -> error out on unhandled third_token.type; exit
+                            // break;
+                        // default -> error out on unhandled second_token.type; exit
+                // break;
+            // default -> error out on unhandled first_token.type; exit
+        // while token_list is not EMPTY and next_token is SEMI
+            // pop the the SEMI off of token_list
+        // set root_node.sibling to node
+        // set root_node to node
+        // set first_token to null
 }
