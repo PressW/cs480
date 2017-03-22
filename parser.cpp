@@ -56,7 +56,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
         Tree_Node node;
 
         // pop first_token off of token_list and switch on its type
-        Token first_token = token_list.front();
+        Token first_token = token_list.at( token_list.begin() );
         token_list.erase( token_list.begin() );
         switch( first_token.type )
         {
@@ -85,7 +85,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                 if( !token_list.empty() )
                 {
                     // pop second_token off of token_list and switch on its type
-                    Token second_token = token_list.front();
+                    Token second_token = token_list.at( token_list.begin() );
                     token_list.erase( token_list.begin() );
                     switch( second_token.type )
                     {
@@ -96,7 +96,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                             if( !token_list.empty() )
                             {
                                 // pop third_token off of token_list and switch on its type
-                                Token third_token = token_list.front();
+                                Token third_token = token_list.at( token_list.begin() );
                                 token_list.erase( token_list.begin() );
                                 switch( third_token.type )
                                 {
@@ -105,7 +105,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                                     {
                                         // pop fourth_token off of token_list and switch on its type
                                         node.nodeType = ARRAY;
-                                        Token fourth_token = token_list.front();
+                                        Token fourth_token = token_list.at( token_list.begin() );
                                         token_list.erase( token_list.begin() );
                                         switch( fourth_token.type )
                                         {
@@ -249,43 +249,87 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
 
 
 
-void Parser::find_arguments(Tree_Node root_node, list<Token> token_list ){
+void Parser::find_arguments(Tree_Node *root_node, vector<Token> token_list ){
 
-    // while token_list is not EMPTY
-        // create new node
-        // pop first_token off of token_list
-        // switch on first_token.type
-            // NUMBER ->
-                // if token_list is EMPTY
-                    // set node.nodeType to NUMBER
-                    // set node.typeSpecifier to into
-                    // set node.nValue to int(first_token.value)
-                // else
-                    // pop second_token off of token_list
-                    // switch on second_token.type
-                        // COMMA ->
-                            // set node.type to NUMBER
-                            // set node.typeSpecifier to int
-                            // set node.nValue to int(second_token.value)
-                            // break;
-                        // default -> error out unhandled second_token.type; exit
-                // break;
-            // ID ->
-                // if token_list is EMPTY
-                    // set node.nodeType to VARIABLE
-                    // set node.Svalue to first_token.value
-                // else
-                    // pop second_token off of token_list
-                    // switch on second_token.type
-                        // COMMA ->
-                            //set node.nodeType to VARIABLE
-                            // set node.sValue to first_token.value
-                            // break;
-                        // default -> error out unhandled second_token.type; exit
-                //break;
-            // default -> error out unhandled first_token.type; exit
-        // set root_node.sibling to node
-        // set root_node to node
+    while( !token_list.empty() )
+    {
+        Trea_Node node;
+        Token first_token = token_list.at( token_list.begin() );
+        token_list.erase( token_list.begin() );
+        switch( first_token.type )
+        {
+
+            case NUMBER:
+            {
+                if( token_list.empty() )
+                {
+                    node->nodeType = NUMBER;
+                    node->typeSpecifier = INT;
+                    node->nValue = std::stoi( first_token.value );
+                }
+                else
+                {
+                    Token second_token = token_list.at( token_list.begin() );
+                    token_list.erase( token_list.begin() );
+                    switch( second_token.type )
+                    {
+
+                        case COMMA:
+                        {
+                            node->nodeType = NUMBER;
+                            node->typeSpecifier = INT;
+                            node->nValue = std::stoi( first_token.value );
+                            break;
+                        }
+
+                        default:
+                        {
+                            cerr << "ERROR: Unhandled second_token type: " << second_token.type << endl;
+                            exit(-1);
+                        }
+                    }
+                }
+                break;
+            }
+
+            case ID:
+            {
+                if( token_list.empty() )
+                {
+                    node->nodeType = VARIABLE;
+                    node.sValue = first_token.value;
+                }
+                else
+                {
+                    Token second_token = token_list.at( token_list.begin() );
+                    token_list.erase( token_list.begin() );
+                    switch( second_token.type )
+                    {
+                        case COMMA:
+                        {
+                            node->nodeType = VARIABLE;
+                            node.sValue = first_token.value;
+                            break;
+                        }
+
+                        default:
+                        {
+                            cerr << "ERROR: Unhandled second_token type: " << second_token.type << endl;
+                            exit(-1);
+                        }
+                    }
+                }
+                break;
+            }
+            default:
+            {
+                cerr << "ERROR: Unhandled first_token type: " << first_token.type << endl;
+                exit(-1);
+            }
+        }
+        root_node->sibling = node;
+        root_node = node;
+    }
 }
 
 
