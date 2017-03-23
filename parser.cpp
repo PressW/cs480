@@ -159,8 +159,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                         node->C1->nodeType = PARAMETER_LIST;
                                         // Get iterator pointing to first instance of RPAREN
                                         vector<Token*>::iterator right_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
-
-                                        if ( right_paren == token_list.end() )
+                                        if ( right_paren == token_list.end())
                                         {
                                             node->C1->typeSpecifier = VOID;
                                         }
@@ -175,7 +174,9 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                                 passed_list.push_back(NULL);
                                             }
                                             std::move( token_list.begin(), right_paren, passed_list.begin() );
+                                            
                                             build_subtree( node->C1, passed_list );
+                                            
                                         }
                                         node->C2 = new Tree_Node();
                                         node->C2->nodeType = COMPOUND;
@@ -186,6 +187,9 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                         int num_of_closed_braces = 0;
                                         vector<Token*>::iterator close_brace;
                                         vector<Token*>::iterator index = open_brace;
+                                        // cout << "Top of token list: " << token_list.front()->value << endl;
+                                        // token_list.erase(token_list.begin());
+                                        // cout << "Top of token list AGAIN: " << token_list.front()->value << endl;
                                         do
                                         {
                                             index += 1;
@@ -1014,6 +1018,7 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
     cout << "build_subtree" << endl;
     cout << "Root node: " << root_node->nodeType << endl;
+    cout << "Top of token list (subtree): " << token_list.front()->value << endl;
     switch( root_node->nodeType )
     {
 
