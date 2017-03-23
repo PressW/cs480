@@ -1,0 +1,1134 @@
+/*********************************************** 
+*
+* A program to perform selection sort on a 10
+* element array.
+*
+***********************************************/
+int x[ 10 ];
+int minloc ( int a[], int low, int high ) {
+    int i; int x; int k;
+    k = low;
+    x = a[ low ];
+    i = low + 1;
+    while( i < high ) { /* do swap */
+        if( a[ i ] < x ) {
+        x = a[ i ];
+        k = i;
+        }
+        i = i + 1;
+    }
+
+    return k;
+}
+void sort( int a[], int low, int high ) { 
+    int i; int k; int t;
+    i = low;
+    while( i < high - 1 ) {
+        int t;
+        k = minloc( a, i, high );
+        t = a[ k ];
+        a[ k ] = a[ i ];
+        a[ i ] = t;
+        i = i + 1;
+    }
+}
+void main( void ) {
+    int i;
+    i = 0;
+    while( i < 10 ) {
+        read x[ i ]; 
+        i = i + 1;
+    }
+    sort( x, 0, 10 );
+    i = 0;
+    while( i < 10 ) {
+        write( x[ i ] );
+        i = i + 1;
+    }
+}
+
+-------------------------------------
+-             Parse Tree            -
+-------------------------------------    
+Node Type: Program
+Line Number: 9
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+
+Sibling
+Node Type: Array
+Line Number: 9
+Name: x
+Value: 10
+Data Type: int
+Rename: tmpVar000000
+
+Sibling
+Node Type: Function
+Line Number: 11
+Name: minloc
+Value: 0
+Data Type: int
+Rename: null
+
+    C1
+    Node Type: Parameter List
+    Line Number: 11
+    Name: null
+    Value: 0
+    Data Type: unknown
+    Rename: null
+
+    Sibling
+    Node Type: Array
+    Line Number: 11
+    Name: a
+    Value: 0
+    Data Type: int
+    Rename: tmpVar000001 
+
+    Sibling
+    Node Type: Variable
+    Line Number: 11
+    Name: low
+    Value: 0
+    Data Type: int
+    Rename: tmpVar000002
+
+    Sibling
+    Node Type: Variable
+    Line Number: 11
+    Name: high
+    Value: 0
+    Data Type: int
+    Rename: tmpVar000003
+
+    C2
+    Node Type: Compound Statement
+    Line Number: 11
+    Name: null
+    Value: 0
+    Data Type: unknown
+    Rename: null
+
+        C1
+        Node Type: Declaration
+        Line Number: 12
+        Name: null
+        Value: 0
+        Data Type: unknown
+        Rename: null
+
+    Sibling
+    Node Type: Variable
+    Line Number: 12
+    Name: i
+    Value: 0
+    Data Type: int
+    Rename: tmpVar000004
+
+    Sibling
+    Node Type: Variable
+    Line Number: 12
+    Name: x
+    Value: 0
+    Data Type: int
+    Rename: tmpVar000005
+
+    Sibling
+    Node Type: Variable
+    Line Number: 12
+    Name: k
+    Value: 0
+    Data Type: int
+    Rename: tmpVar000006 
+
+    C2
+    Node Type: Statement List
+    Line Number: 14
+    Name: null
+    Value: 0
+    Data Type: unknown
+    Rename: null
+
+    Sibling
+    Node Type: =
+    Line Number: 14
+    Name: null
+    Value: 0
+    Data Type: unknown
+    Rename: null
+
+        C1
+        Node Type: Variable
+        Line Number: 14
+        Name: k
+        Value: 0
+        Data Type: int
+        Rename: tmpVar000006
+
+        C2
+        Node Type: Variable
+        Line Number: 14
+        Name: low
+        Value: 0
+        Data Type: int
+        Rename: tmpVar000002
+
+    Sibling
+    Node Type: =
+    Line Number: 15
+    Name: null
+    Value: 0
+    Data Type: unknown
+    Rename: null
+
+        C1
+        Node Type: Variable
+        Line Number: 15
+        Name: x
+        Value: 0
+        Data Type: int
+        Rename: tmpVar000005
+
+        C2
+        Node Type: Array
+        Line Number: 15
+        Name: a
+        Value: 0
+        Data Type: int
+        Rename: tmpVar000001 
+
+            C1
+            Node Type: Variable
+            Line Number: 15
+            Name: low
+            Value: 0
+            Data Type: int
+            Rename: tmpVar000002
+
+    Sibling
+    Node Type: =
+    Line Number: 16
+    Name: null
+    Value: 0
+    Data Type: unknown
+    Rename: null
+
+        C1
+        Node Type: Variable
+        Line Number: 16
+        Name: i
+        Value: 0
+        Data Type: int
+        Rename: tmpVar000004
+
+        C2
+        Node Type: +
+        Line Number: 16
+        Name: null
+        Value: 0
+        Data Type: unknown
+        Rename: null
+
+            C1
+            Node Type: Variable
+            Line Number: 16
+            Name: low
+            Value: 0
+            Data Type: int
+            Rename: tmpVar000002
+
+            C2
+            Node Type: a number
+            Line Number: 16
+            Name: null
+            Value: 1
+            Data Type: int
+            Rename: null
+
+    Sibling
+    Node Type: while
+    Line Number: 18
+    Name: null
+    Value: 0
+    Data Type: unknown
+    Rename: null 
+
+        C1
+        Node Type: <
+        Line Number: 18
+        Name: null
+        Value: 0
+        Data Type: unknown
+        Rename: null
+
+            C1
+            Node Type: Variable
+            Line Number: 18
+            Name: i
+            Value: 0
+            Data Type: int
+            Rename: tmpVar000004
+
+            C2
+            Node Type: Variable
+            Line Number: 18
+            Name: high
+            Value: 0
+            Data Type: int
+            Rename: tmpVar000003
+
+        C2
+        Node Type: Compound Statement
+        Line Number: 18
+        Name: null
+        Value: 0
+        Data Type: unknown
+        Rename: null
+
+            C1
+            Node Type: Declaration
+            Line Number: 19
+            Name: null
+            Value: 0
+            Data Type: unknown
+            Rename: null
+
+            C2
+            Node Type: Statement List
+            Line Number: 19
+            Name: null
+            Value: 0
+            Data Type: unknown
+            Rename: null
+
+            Sibling
+            Node Type: if
+            Line Number: 19
+            Name: null
+            Value: 0
+            Data Type: unknown
+            Rename: null 
+------------------------------ end of page 8
+C1
+Node Type: <
+Line Number: 19
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Array
+Line Number: 19
+Name: a
+Value: 0
+Data Type: int
+Rename: tmpVar000001
+C1
+Node Type: Variable
+Line Number: 19
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar000004
+C2
+Node Type: Variable
+Line Number: 19
+Name: x
+Value: 0
+Data Type: int
+Rename: tmpVar000005
+C2
+Node Type: Compound Statement
+Line Number: 19
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Declaration
+Line Number: 20
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C2
+Node Type: Statement List
+Line Number: 20
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null 
+Sibling
+Node Type: =
+Line Number: 20
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 20
+Name: x
+Value: 0
+Data Type: int
+Rename: tmpVar000005
+C2
+Node Type: Array
+Line Number: 20
+Name: a
+Value: 0
+Data Type: int
+Rename: tmpVar000001
+C1
+Node Type: Variable
+Line Number: 20
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar000004
+Sibling
+Node Type: =
+Line Number: 21
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 21
+Name: k
+Value: 0
+Data Type: int
+Rename: tmpVar000006
+C2
+Node Type: Variable
+Line Number: 21
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar000004 
+Sibling
+Node Type: =
+Line Number: 23
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 23
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar000004
+C2
+Node Type: +
+Line Number: 23
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 23
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar000004
+C2
+Node Type: a number
+Line Number: 23
+Name: null
+Value: 1
+Data Type: int
+Rename: null
+Sibling
+Node Type: return
+Line Number: 26
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 26
+Name: k
+Value: 0
+Data Type: int
+Rename: tmpVar000006 
+Sibling
+Node Type: Function
+Line Number: 29
+Name: sort
+Value: 0
+Data Type: void
+Rename: null
+C1
+Node Type: Parameter List
+Line Number: 29
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+Sibling
+Node Type: Array
+Line Number: 29
+Name: a
+Value: 0
+Data Type: int
+Rename: tmpVar000007
+Sibling
+Node Type: Variable
+Line Number: 29
+Name: low
+Value: 0
+Data Type: int
+Rename: tmpVar000008
+Sibling
+Node Type: Variable
+Line Number: 29
+Name: high
+Value: 0
+Data Type: int
+Rename: tmpVar000009
+C2
+Node Type: Compound Statement
+Line Number: 29
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Declaration
+Line Number: 30
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null 
+Sibling
+Node Type: Variable
+Line Number: 30
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000010
+Sibling
+Node Type: Variable
+Line Number: 30
+Name: k
+Value: 0
+Data Type: int
+Rename: tmpVar0000011
+Sibling
+Node Type: Variable
+Line Number: 30
+Name: t
+Value: 0
+Data Type: int
+Rename: tmpVar0000012
+C2
+Node Type: Statement List
+Line Number: 32
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+Sibling
+Node Type: =
+Line Number: 32
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 32
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000010
+C2
+Node Type: Variable
+Line Number: 32
+Name: low
+Value: 0
+Data Type: int
+Rename: tmpVar000008 
+Sibling
+Node Type: while
+Line Number: 33
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: <
+Line Number: 33
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 33
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000010
+C2
+Node Type: -
+Line Number: 33
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 33
+Name: high
+Value: 0
+Data Type: int
+Rename: tmpVar000009
+C2
+Node Type: a number
+Line Number: 33
+Name: null
+Value: 1
+Data Type: int
+Rename: null
+C2
+Node Type: Compound Statement
+Line Number: 33
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null 
+C1
+Node Type: Declaration
+Line Number: 34
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+Sibling
+Node Type: Variable
+Line Number: 34
+Name: t
+Value: 0
+Data Type: int
+Rename: tmpVar0000013
+C2
+Node Type: Statement List
+Line Number: 35
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+Sibling
+Node Type: =
+Line Number: 35
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 35
+Name: k
+Value: 0
+Data Type: int
+Rename: tmpVar0000011
+C2
+Node Type: Call
+Line Number: 35
+Name: minloc
+Value: 0
+Data Type: int
+Rename: null
+C1
+Node Type: Arguments
+Line Number: 35
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null 
+Sibling
+Node Type: Array
+Line Number: 35
+Name: a
+Value: 0
+Data Type: int
+Rename: tmpVar000007
+Sibling
+Node Type: Variable
+Line Number: 35
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000010
+Sibling
+Node Type: Variable
+Line Number: 35
+Name: high
+Value: 0
+Data Type: int
+Rename: tmpVar000009
+Sibling
+Node Type: =
+Line Number: 36
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 36
+Name: t
+Value: 0
+Data Type: int
+Rename: tmpVar0000013
+C2
+Node Type: Array
+Line Number: 36
+Name: a
+Value: 0
+Data Type: int
+Rename: tmpVar000007
+C1
+Node Type: Variable
+Line Number: 36
+Name: k
+Value: 0
+Data Type: int
+Rename: tmpVar0000011 
+Sibling
+Node Type: =
+Line Number: 37
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Array
+Line Number: 37
+Name: a
+Value: 0
+Data Type: int
+Rename: tmpVar000007
+C1
+Node Type: Variable
+Line Number: 37
+Name: k
+Value: 0
+Data Type: int
+Rename: tmpVar0000011
+C2
+Node Type: Array
+Line Number: 37
+Name: a
+Value: 0
+Data Type: int
+Rename: tmpVar000007
+C1
+Node Type: Variable
+Line Number: 37
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000010
+Sibling
+Node Type: =
+Line Number: 38
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Array
+Line Number: 38
+Name: a
+Value: 0
+Data Type: int
+Rename: tmpVar000007 
+C1
+Node Type: Variable
+Line Number: 38
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000010
+C2
+Node Type: Variable
+Line Number: 38
+Name: t
+Value: 0
+Data Type: int
+Rename: tmpVar0000013
+Sibling
+Node Type: =
+Line Number: 39
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 39
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000010
+C2
+Node Type: +
+Line Number: 39
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 39
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000010
+C2
+Node Type: a number
+Line Number: 39
+Name: null
+Value: 1
+Data Type: int
+Rename: null
+Sibling
+Node Type: Function
+Line Number: 43
+Name: main
+Value: 0
+Data Type: void
+Rename: null
+C1
+Node Type: Parameter List
+Line Number: 43
+Name: null
+Value: 0
+Data Type: void
+Rename: null
+C2
+Node Type: Compound Statement
+Line Number: 43
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Declaration
+Line Number: 44
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+Sibling
+Node Type: Variable
+Line Number: 44
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014
+C2
+Node Type: Statement List
+Line Number: 45
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+Sibling
+Node Type: =
+Line Number: 45
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 45
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014
+C2
+Node Type: a number
+Line Number: 45
+Name: null
+Value: 0
+Data Type: int
+Rename: null
+Sibling
+Node Type: while
+Line Number: 47
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: <
+Line Number: 47
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 47
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014
+C2
+Node Type: a number
+Line Number: 47
+Name: null
+Value: 10
+Data Type: int
+Rename: null
+C2
+Node Type: Compound Statement
+Line Number: 47
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null 
+C1
+Node Type: Declaration
+Line Number: 48
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C2
+Node Type: Statement List
+Line Number: 48
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+Sibling
+Node Type: read
+Line Number: 48
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Array
+Line Number: 48
+Name: x
+Value: 0
+Data Type: int
+Rename: tmpVar000000
+C1
+Node Type: Variable
+Line Number: 48
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014
+Sibling
+Node Type: =
+Line Number: 49
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 49
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014 
+C2
+Node Type: +
+Line Number: 49
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 49
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014
+C2
+Node Type: a number
+Line Number: 49
+Name: null
+Value: 1
+Data Type: int
+Rename: null
+Sibling
+Node Type: Call
+Line Number: 52
+Name: sort
+Value: 0
+Data Type: void
+Rename: null
+C1
+Node Type: Arguments
+Line Number: 52
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+Sibling
+Node Type: Array
+Line Number: 52
+Name: x
+Value: 0
+Data Type: int
+Rename: tmpVar000000
+Sibling
+Node Type: a number
+Line Number: 52
+Name: null
+Value: 0
+Data Type: int
+Rename: null 
+Sibling
+Node Type: a number
+Line Number: 52
+Name: null
+Value: 10
+Data Type: int
+Rename: null
+Sibling
+Node Type: =
+Line Number: 54
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 54
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014
+C2
+Node Type: a number
+Line Number: 54
+Name: null
+Value: 0
+Data Type: int
+Rename: null
+Sibling
+Node Type: while
+Line Number: 55
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: <
+Line Number: 55
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 55
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014
+C2
+Node Type: a number
+Line Number: 55
+Name: null
+Value: 10
+Data Type: int
+Rename: null
+C2
+Node Type: Compound Statement
+Line Number: 55
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Declaration
+Line Number: 56
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C2
+Node Type: Statement List
+Line Number: 56
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+Sibling
+Node Type: write
+Line Number: 56
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Array
+Line Number: 56
+Name: x
+Value: 0
+Data Type: int
+Rename: tmpVar000000
+C1
+Node Type: Variable
+Line Number: 56
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014 
+Sibling
+Node Type: =
+Line Number: 57
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 57
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014
+C2
+Node Type: +
+Line Number: 57
+Name: null
+Value: 0
+Data Type: unknown
+Rename: null
+C1
+Node Type: Variable
+Line Number: 57
+Name: i
+Value: 0
+Data Type: int
+Rename: tmpVar0000014
+C2
+Node Type: a number
+Line Number: 57
+Name: null
+Value: 1
+Data Type: int
+Rename: null 
