@@ -342,142 +342,226 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token> token_list ){
 
 void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token> token_list ){
 
-    // while token_list is not EMPTY
     while( !token_list.empty() )
     {
-        // if starting_token is null
         if( first_token == NULL )
         {
             Token first_token = token_list.at( 0 );
             token_list.erase( token_list.begin() );
         }
-        // create new node
-        Tree_Node node = new Tree_Node();
 
-        // set node.nodeType to EXPRESSIOn
-        // create node.C1 child node
-        // set node.C1.sValue to first_token.value
-        // switch on first_token.value
-            // NUMBER ->
-                // set node.C1.nodeType to NUMBER
-                // set node.C1.nodeType to into
-                // set node.C1.nValue to int(first_token.value)
-                // break;
-            // ID ->
-                // set node.C1.nodeType to VARIABLE
-                // if token_list is not EMPTY
-                    // pop second_token off of token_list
-                    // switch on second_token.type
-                        // LBRACKET ->
-                            // set node.C1.nodeType to ARRAY
-                            // pop third_token off of token_list
-                            // switch on third_token.type
-                                // INT ->
-                                    // set node.C1.nValue to int(third_token.value)
-                                    // ?? pops anoter token off the top ??
-                                    // break;
-                                // ID ->
-                                    // set index to SEMI in token_list
-                                    // if index is not validating
-                                        // set index to end of token_list
-                                    // call find_expression(third_token, node.C1, token_list(from 1 to index))
-                                    // set node.C1 to node.C1.sibling
-                                    // set token_list to token_list(from index to end of token_list)
-                                    // break
-                                // default -> error out on unhandled third_token.type; exit
-                            // break;
-                        // MINUS ->
-                            // set node.nodeType to minutes
-                            // create node.C2 child node
-                            // set index to MINUS in token_list
-                            // if index is not valid
-                                //set index to end of token_list
-                            // call find_expression(null, node.C2, token_list)
-                            // set token_list to token_list(from index to end of token_list)
-                            // set node.C2 to node.C2.sibling
-                            // break;
-                        // LS ->
-                            // set node.nodeType to LS
-                            // create node.C2 child node
-                            // set index to SEMI in token_list
-                            // if index is not valid
-                                // set index to end of token_list
-                            // call find_expression(null, node.C2, token_list)
-                            // set token_list to token_list(from index to end of token_list)
-                            // set node.C2 to node.C2.sibling
-                            // break;
-                        // ASSIGN ->
-                            // pop third_token off of token_list
-                            // switch on third_token.type
-                                // NUMBER ->
-                                    // set node.nodeType to assign
-                                    // create node.C2 child node
-                                    // set node.C2.nodeType to NUMBER
-                                    // set node.C2.typeSpecifier to INT
-                                    // set node.C2.nValue to int(third_token.value)
-                                    // break;
-                                // ID ->
-                                    // create node.C2 child node
-                                    // if token_list is EMPTY
-                                        // set node.C2.nodeType to VARIABLE
-                                        // set node.C2.sValue to third_token.value
-                                    // else
-                                        // pop fourth_token off of token_list
-                                        // switch on fourth_token.type
-                                            // LPAREN ->
-                                                // set node.C2.nodeType to Call
-                                                // set node.C2.sValue to third_token.value
-                                                // set node.C2.typeSpecifier to INT
-                                                // create new node.C2.C1 child node
-                                                // set node.C2.C1.nodeType to ARGUMENTS
-                                                // set index to RPAREN in token_list
-                                                // if index is not valid
-                                                    // set index to end of token_list
-                                                // call find_arguments( node.C2.C1, token_list(from 0 to index))
-                                                // set node.C2.C1 to node.C2.C1.sibling
-                                                // set token_list to token_list(from index+1 to end of token_list)
-                                                // break
-                                            // SEMI ->
-                                                // set node.C2.nodeType to VARIABLE
-                                                // set node.C2.sValue to third_token.value
-                                                // break
-                                            // LBRACKET ->
-                                                // set node.C2.nodeType to ARRAY
-                                                // set node.C2.sValue to third_token.value
-                                                // create new node.C2.C1 child node
-                                                // set indext to RBRACKET in token_list
-                                                // call find_expression(null, node.C2.C1, token_list(from 0 to index))
-                                                // set node.C2.C1 to node.C2.C1.sibling
-                                                // set token_list to token_list(from index+1 to end of token_list)
-                                                // break
-                                            // PLUS ->
-                                                // set node.C2.nodeType to Plus
-                                                // set node.C2.C1 to node
-                                                // set new temp_node to node.C2
-                                                // set node.C2 to null
-                                                // set node to temp_node
-                                                // create new node.C2 child node
-                                                    // set index to end of token_list
-                                                    // call find_expression(null, node.C2, token_list(from 0 to index))
-                                                    // set token_list to token_list(from index to end of token_list)
-                                                // set node.C2 to node.C2.sibling
-                                                // if node.C1.typeSpecifier is EXPRESSION AND node.C1.C1 is not null and node.C1.C2 is null
-                                                    // set node.C1 to node.C1.C1
-                                                // if node.C2.typeSpecifier is EXPRESSION AND node.C2.C1 is not null and node.C2.C2 is null
-                                                    // set node.C2 = node.C2.C1
-                                                // breakout
-                                            // default -> error out on unhandled fourth_token.type; exit
-                                    // break
-                                // default -> error out on unhandled third_token.type; exit
-                            // break;
-                        // default -> error out on unhandled second_token.type; exit
-                // break;
-            // default -> error out on unhandled first_token.type; exit
-        // while token_list is not EMPTY and next_token is SEMI
-            // pop the the SEMI off of token_list
-        // set root_node.sibling to node
-        // set root_node to node
-        // set first_token to null
+        Tree_Node node = new Tree_Node();
+        node->nodeType = EXPRESSION;
+        node.C1 = new Tree_Node();
+        node.C1->sValue = first_token.value();
+        switch( first_token.type )
+        {
+
+            case NUMBER:
+            {
+                node.C1->nodeType = NUMBER;
+                node.C1->typeSpecifier = INT;
+                node.C1.nValue = std::stoi( first_token.value );
+                break;
+            }
+
+            case ID:
+                node.C1->nodeType = VARIABLE;
+                if( !token_list.empty() )
+                {
+                    Token second_token = token_list.at( 0 );
+                    token_list.erase( token_list.begin() );
+                    switch( second_token.type )
+                    {
+
+                        case LBRACKET:
+                        {
+                            node.C1->nodeType = ARRAY;
+                            Token third_token = token_list.at( 0 );
+                            token_list.erase( token_list.begin() );
+                            switch( third_token.type )
+                            {
+
+                                case INT:
+                                {
+                                    node.C1->nValue = std::stoi( third_token.value );
+                                    token_list.erase( token_list.begin() );
+                                    break;
+                                }
+
+                                case ID:
+                                {
+                                    vector<Token>::iterator index = std::find( token_list.begin(), token_list.end(), SEMI );
+                                    vector<Token> passed_list;
+                                    std::move( (token_list.begin() + 1), index, passed_list.begin() );
+                                    find_expression( third_token, node.C1, passed_list);
+                                    node.C1 = node.C1->sibling;
+                                    break;
+                                }
+
+                                default:
+                                {
+                                    cerr << "ERROR: Unhandled third_token type: " << third_token.type << endl;
+                                    exit(-1);
+                                }
+                            }
+                            break;
+                        }
+
+                        case MINUS:
+                        {
+                            node->nodeType = MINUS;
+                            node.C2 = new Tree_Node();
+                            vector<Token>::iterator index = std::find( token_list.begin(), token_list.end(), MINUS );
+                            find_expression(NULL, node.C2, token_list);
+                            token_list.erase( token_list.begin(), index );
+                            node.C2 = node.C2->sibling;
+                            break;
+                        }
+
+                        case LS:
+                        {
+                            node->nodeType = LS;
+                            node.C2 = new Tree_Node();
+                            vector<Token>::iterator index = std::find( token_list.begin(), token_list.end(), SEMI );
+                            find_expression(NULL, node.C2, token_list);
+                            token_list.erase( token_list.begin(), index );
+                            node.C2 = node.C2->sibling;
+                            break;
+                        }
+
+                        case ASSIGN:
+                        {
+                            Token third_token = token_list.at( 0 );
+                            token_list.erase( token_list.begin() );
+                            switch( third_token.type )
+                            {
+
+                                case NUMBER:
+                                {
+                                    node->nodeType = ASSIGN;
+                                    node.C2 = new Tree_Node();
+                                    node.C2->nodeType = NUMBER;
+                                    node.C2->typeSpecifier = INT;
+                                    node.C2->nValue = std:stoi( third_token.value );
+                                    break;
+                                }
+
+                                case ID:
+                                {
+                                    node.C2 = new Tree_Node();
+                                    if ( token_list.empty() )
+                                    {
+                                        node.C2->nodeType = VARIABLE;
+                                        node.C2->sValue = third_token.value;
+                                    }
+                                    else
+                                    {
+                                        Token fourth_token = token_list.at( 0 );
+                                        token_list.erase( token_list.begin() );
+                                        switch( fourth_token.type )
+                                        {
+
+                                            case LPAREN:
+                                            {
+                                                node.C2->nodeType = CALL;
+                                                node.C2->sValue = third_token.value;
+                                                node.C2->typeSpecifier = INT;
+                                                node.C2->C1 = new Tree_Node();
+                                                node.C2->C1->nodeType = ARGUMENTS;
+                                                vector<Token>::iterator right_paren = std::find( token_list.begin(), token_list.end(), RPAREN );
+                                                vector<Token> passed_list;
+                                                std::move( token_list.begin(), right_paren, passed_list.begin() );
+                                                find_arguments(node.C2->C1, passed_list)
+                                                break;
+                                            }
+
+                                            case SEMI:
+                                            {
+                                                node.C2->nodeType = VARIABLE;
+                                                node.C2->sValue = third_token.value;
+                                                break;
+                                            }
+
+                                            case LBRACKET:
+                                            {
+                                                node.C2->nodeType = ARRAY;
+                                                node.C2->sValue = third_token.value;
+                                                node.C2->C1 = new Tree_Node();
+                                                vector<Token>::iterator right_bracket = std::find( token_list.begin(), token_list.end(), RBRACKET );
+                                                vector<Token> passed_list;
+                                                std::move( token_list.begin(), right_bracket, passed_list.begin() );
+                                                find_expression( NULL, node.C2->C1, passed_list );
+                                                node.C2->C1 = node.C2->C1->sibling;
+                                                break;
+                                            }
+
+                                            case PLUS:
+                                            {
+                                                node.C2->nodeType = PLUS;
+                                                node.C2->C1 = &node;
+                                                Tree_Node temp_node = node.C2;
+                                                node.C2 = NULL;
+                                                node.C2 = new Tree_Node();
+                                                vector<Token>::iterator index = token_list.end();
+                                                std::move( token_list.begin(), index, passed_list.begin() );
+                                                find_expression(NULL, node.C2, passed_list);
+                                                node.C2 = &node.C2->sibling;
+                                                if( node.C1->typeSpecifier == EXPRESSION && node.C1->C1 != NULL && node.C1->C2 == NULL)
+                                                {
+                                                    node.C1 = &node.C1->C1
+                                                }
+                                                if( node.C2->typeSpecifier == EXPRESSION && node.C2->C1 != NULL && node.C2->C2 == NULL)
+                                                {
+                                                    node.C2 = &node.C2->C1
+                                                }
+                                                break;
+                                            }
+
+                                            default:
+                                            {
+                                               cerr << "ERROR: Unhandled fourth_token type: " << fourth_token.type << endl;
+                                               exit(-1);
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+
+                                default:
+                                {
+                                   cerr << "ERROR: Unhandled third_token type: " << third_token.type << endl;
+                                   exit(-1);
+                                }
+                            }
+                            break;
+                        }
+
+                        default:
+                        {
+                           cerr << "ERROR: Unhandled second_token type: " << second_token.type << endl;
+                           exit(-1);
+                        }
+                    }
+                }
+                break;
+            }
+
+            default:
+            {
+               cerr << "ERROR: Unhandled first_token type: " << first_token.type << endl;
+               exit(-1);
+            }
+        }
+
+        while( !token_list.empty() && ( token_list.at(0).type == SEMI ) )
+        {
+            token_list.erase( token_list.begin() );
+        }
+
+        root_node->sibling = &node;
+        root_node = &node;
+        first_token = NULL;
     }
 }
 
