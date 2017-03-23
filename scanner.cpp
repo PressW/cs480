@@ -21,21 +21,24 @@ Scanner::Scanner(string filename){
     for (int i = 0; i < lines.size(); ++i){
         cout << lines[i] << endl;
     }*/
-    vector<Token*> tokens;
     string data;
     string token_string;
     for (int i = 0; i < lines.size(); ++i){
         data = lines[i];
+        //cout << "Line: " << data << endl;
         token_string = "";
         for (int c = 0; c < data.length(); ++c){
             token_string += data[c];
+            //cout << "\tViewing: " << data[c] << endl;
             switch(data[c]){
                 case ' ':
                 case '\t':
                     token_string = trim(token_string);
                     if (!token_string.empty()){
                         tokens.push_back(stringToToken(token_string));
+                        token_string = "";
                     }
+                    
                     break;
                 case ';':
                     token_string = token_string.substr(0,token_string.length() - 1);
@@ -71,6 +74,22 @@ Scanner::Scanner(string filename){
                     tokens.push_back(stringToToken(token_string));
                     token_string = "";
                     break;
+                case '{':
+                    if (token_string != "{"){
+                        tokens.push_back(stringToToken(token_string.substr(0,token_string.length() - 1)));
+                        token_string = "{";
+                    }
+                    tokens.push_back(stringToToken(token_string));
+                    token_string = "";
+                    break;
+                case '}':
+                    if (token_string != "}"){
+                        tokens.push_back(stringToToken(token_string.substr(0,token_string.length() - 1)));
+                        token_string = "}";
+                    }
+                    tokens.push_back(stringToToken(token_string));
+                    token_string = "";
+                    break;
                 case ',':
                     if (token_string != ","){
                         tokens.push_back(stringToToken(token_string.substr(0,token_string.length() - 1)));
@@ -88,8 +107,9 @@ Scanner::Scanner(string filename){
                     token_string = "";
                     break;
             }
+            
         }
-        this->all_tokens.push_back(tokens);
+        //this->all_tokens.push_back(tokens);
     }
 }
 Token* Scanner::stringToToken(string tokenString){
@@ -169,25 +189,28 @@ Token* Scanner::stringToToken(string tokenString){
 
 Token* Scanner::getToken(){
     Token *result = NULL;
-    if (this->currentLine >= all_tokens.size()){
-        return new Token(EOF,"");
+    if (this->cur >= tokens.size()){
+        return NULL;
     }
-    vector<Token*> tokenLine = all_tokens.at(this->currentLine);
-    while (this->posLine >= tokenLine.size()){
-        this->posLine = 0;
-        this->currentLine++;
-        tokenLine = all_tokens.at(this->currentLine);
-        if (this->currentLine >= all_tokens.size()){
-            return new Token(EOF,"");
-        }
-    }
-    result = tokenLine.at(this->posLine);
-    this->posLine++;
-    if (this->posLine >= tokenLine.size()){
-        this->posLine = 0;
-        this->currentLine++;
-    }
-    cout << "Token: " << result->value << endl;
+    result = tokens.at(cur);
+    cur++;
+    // vector<Token*> tokenLine = tokens.at(this->currentLine);
+    
+    // while (this->posLine >= tokenLine.size()){
+    //     this->posLine = 0;
+    //     this->currentLine++;
+    //     tokenLine = all_tokens.at(this->currentLine);
+    //     if (this->currentLine >= all_tokens.size()){
+    //         return NULL;
+    //     }
+    // }
+    // result = tokenLine.at(this->posLine);
+    // this->posLine++;
+    // if (this->posLine >= tokenLine.size()){
+    //     this->posLine = 0;
+    //     this->currentLine++;
+    // }
+    //cout << "Token: " << result->value << endl;
     return result;
 }
 Scanner::~Scanner(){

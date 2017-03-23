@@ -215,7 +215,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
                                     default:
                                     {
-                                        cerr << "ERROR: Unhandled third_token type: " << third_token->type << endl;
+                                        cerr << "ERROR: Unhandled third_token type: " << third_token->value << endl;
                                         exit(-1);
                                     }
                                 }
@@ -402,7 +402,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                 default:
                                 {
-                                    cerr << "ERROR: Unhandled third_token type: " << third_token->type << endl;
+                                    cerr << "ERROR: Unhandled third_token type: " << third_token->value << endl;
                                     exit(-1);
                                 }
                             }
@@ -532,7 +532,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                 default:
                                 {
-                                   cerr << "ERROR: Unhandled third_token type: " << third_token->type << endl;
+                                   cerr << "ERROR: Unhandled third_token type: " << third_token->value << endl;
                                    exit(-1);
                                 }
                             }
@@ -629,7 +629,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
                             default:
                             {
-                                cerr << "ERROR: Unhandled third_token type: " << third_token->type << endl;
+                                cerr << "ERROR: Unhandled third_token type: " << third_token->value << endl;
                                 exit(-1);
                             }
                         }
@@ -845,7 +845,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
 
-    switch( root_node->type )
+    switch( root_node->nodeType )
     {
 
         case PROGRAM:
@@ -856,8 +856,8 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
         case PARAMETER_LIST:
         {
-            Tree_Node node = new Tree_Node();
-            node = &root_node;
+            Tree_Node *node = new Tree_Node();
+            node = root_node;
             switch( node->typeSpecifier )
             {
                 case VOID:
@@ -879,11 +879,11 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
             }
         }
 
-        case COMPOUD:
+        case COMPOUND:
         {
             root_node->C1 = new Tree_Node();
             root_node->C1->nodeType = DECLARATION;
-            bool keep_going = TRUE;
+            bool keep_going = true;
             vector<Token*>::iterator index = token_list.begin();
             int position;
             do
@@ -901,7 +901,7 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
                     default:
                     {
-                        keep_going = FALSE;
+                        keep_going = false;
                         break;
                     }
                 }
@@ -915,8 +915,8 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
                 find_siblings( root_node->C1, passed_list);
             }
 
-            root->C2 = new Tree_Node();
-            root->C2->nodeType = STATEMENT_LIST;
+            root_node->C2 = new Tree_Node();
+            root_node->C2->nodeType = STATEMENT_LIST;
             build_subtree( root_node->C2, token_list );
             break;
         }
