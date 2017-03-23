@@ -88,7 +88,11 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                 {
                     cout << "\tTOKENLIST NOT EMPTY\n";
                     // pop second_token off of token_list and switch on its type
+                    cout << "Tokenlist size: " << token_list.size() << endl;
+                    cout << "Token type: " << token_list.at(45) << endl;
+                    cout << "Token value: " << token_list.front() << endl;
                     Token *second_token = new Token(token_list.front()->type,token_list.front()->value);
+                    cout << "Erasing\n";
                     token_list.erase( token_list.begin() );
                     cout << "\t\tSwitch\n" << second_token->type << "^^^\n";
                     switch( second_token->type )
@@ -132,7 +136,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
                                             default:
                                             {
-                                              cerr << "ERROR: Unhandled fourth_token type: " << fourth_token->type << endl;
+                                              cerr << "ERROR: Unhandled fourth_token type: " << fourth_token->value << endl;
                                               exit(-1);
                                             }
                                         }
@@ -160,17 +164,17 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                         {
                                             node->C1->typeSpecifier = INT;
                                             vector<Token*> passed_list;
-                                            for (int i = 0; i < token_list.size(); ++i){
-                                                passed_list.push_back(0);
+                                            int start, end;
+                                            start = std::distance(token_list.begin(),token_list.begin());
+                                            end = std::distance(token_list.begin(), right_paren);
+                                            for (int i = start; i < end; ++i){
+                                                passed_list.push_back(NULL);
                                             }
-                                            //passed_list.clear();
-                                            cout << "move\n";
                                             std::move( token_list.begin(), right_paren, passed_list.begin() );
-                                            cout << "subtree\n";
                                             build_subtree( node->C1, passed_list );
                                         }
                                         node->C2 = new Tree_Node();
-                                        node->C2->nodeType = PARAMETER_LIST;
+                                        node->C2->nodeType = COMPOUND;
                                         // Get iterator pointing to first instance of LBRACE
                                         vector<Token*>::iterator open_brace = std::find_if( token_list.begin(), token_list.end(), IS_LBRACE );
 
@@ -214,6 +218,12 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                         open_brace += 1;
 
                                         vector<Token*> passed_list;
+                                        int start, end;
+                                        start = std::distance(token_list.begin(),open_brace);
+                                        end = std::distance(token_list.begin(), close_brace);
+                                        for (int i = start; i < end; ++i){
+                                            passed_list.push_back(NULL);
+                                        }
                                         std::move( open_brace, close_brace, passed_list.begin() );
                                         build_subtree( node->C2, passed_list );
                                         root_node->sibling = node;
@@ -249,7 +259,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
                         default:
                         {
-                            cerr << "ERROR: Unhandled second_token type: " << second_token->type << endl;
+                            cerr << "ERROR: Unhandled second_token type: " << second_token->value << endl;
                             exit(-1);
                         }
                     }
@@ -264,7 +274,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
             default:
             {
-                cerr << "ERROR: Unhandled first_token type: " << first_token->type << endl;
+                cerr << "ERROR: Unhandled first_token type: " << first_token->value << endl;
                 exit(-1);
             }
         }
@@ -309,7 +319,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
 
                         default:
                         {
-                            cerr << "ERROR: Unhandled second_token type: " << second_token->type << endl;
+                            cerr << "ERROR: Unhandled second_token type: " << second_token->value << endl;
                             exit(-1);
                         }
                     }
@@ -339,7 +349,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
 
                         default:
                         {
-                            cerr << "ERROR: Unhandled second_token type: " << second_token->type << endl;
+                            cerr << "ERROR: Unhandled second_token type: " << second_token->value << endl;
                             exit(-1);
                         }
                     }
@@ -348,7 +358,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
             }
             default:
             {
-                cerr << "ERROR: Unhandled first_token type: " << first_token->type << endl;
+                cerr << "ERROR: Unhandled first_token type: " << first_token->value << endl;
                 exit(-1);
             }
         }
@@ -412,6 +422,12 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
                                 {
                                     vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
                                     vector<Token*> passed_list;
+                                    int start, end;
+                                    start = std::distance(token_list.begin(),token_list.begin() + 1);
+                                    end = std::distance(token_list.begin(), index);
+                                    for (int i = start; i < end; ++i){
+                                        passed_list.push_back(NULL);
+                                    }
                                     std::move( (token_list.begin() + 1), index, passed_list.begin() );
                                     find_expression( third_token, node->C1, passed_list);
                                     token_list.erase( token_list.begin() );
@@ -491,6 +507,12 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
                                                 node->C2->C1->nodeType = ARGUMENTS;
                                                 vector<Token*>::iterator right_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
                                                 vector<Token*> passed_list;
+                                                int start, end;
+                                                start = std::distance(token_list.begin(),token_list.begin());
+                                                end = std::distance(token_list.begin(), right_paren);
+                                                for (int i = start; i < end; ++i){
+                                                    passed_list.push_back(NULL);
+                                                }
                                                 std::move( token_list.begin(), right_paren, passed_list.begin() );
                                                 find_arguments(node->C2->C1, passed_list);
                                                 break;
@@ -510,6 +532,12 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
                                                 node->C2->C1 = new Tree_Node();
                                                 vector<Token*>::iterator right_bracket = std::find_if( token_list.begin(), token_list.end(), IS_RBRACKET );
                                                 vector<Token*> passed_list;
+                                                int start, end;
+                                                start = std::distance(token_list.begin(),token_list.begin());
+                                                end = std::distance(token_list.begin(), right_bracket);
+                                                for (int i = start; i < end; ++i){
+                                                    passed_list.push_back(NULL);
+                                                }
                                                 std::move( token_list.begin(), right_bracket, passed_list.begin() );
                                                 find_expression( NULL, node->C2->C1, passed_list );
                                                 node->C2->C1 = node->C2->C1->sibling;
@@ -525,6 +553,12 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
                                                 node->C2 = new Tree_Node();
                                                 vector<Token*>::iterator index = token_list.end();
                                                 vector<Token*> passed_list;
+                                                int start, end;
+                                                start = std::distance(token_list.begin(),token_list.begin());
+                                                end = std::distance(token_list.begin(), index);
+                                                for (int i = start; i < end; ++i){
+                                                    passed_list.push_back(NULL);
+                                                }
                                                 std::move( token_list.begin(), index, passed_list.begin() );
                                                 find_expression(NULL, node->C2, passed_list);
                                                 node->C2 = node->C2->sibling;
@@ -541,7 +575,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                             default:
                                             {
-                                               cerr << "ERROR: Unhandled fourth_token type: " << fourth_token->type << endl;
+                                               cerr << "ERROR: Unhandled fourth_token type: " << fourth_token->value << endl;
                                                exit(-1);
                                             }
                                         }
@@ -560,7 +594,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                         default:
                         {
-                           cerr << "ERROR: Unhandled second_token type: " << second_token->type << endl;
+                           cerr << "ERROR: Unhandled second_token type: " << second_token->value << endl;
                            exit(-1);
                         }
                     }
@@ -568,7 +602,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
                 // break;
                 default:
                 {
-                    cerr << "ERROR: Unhandled first_token type: " << first_token->type << endl;
+                    cerr << "ERROR: Unhandled first_token type: " << first_token->value << endl;
                     exit(-1);
                 }
             }
@@ -604,6 +638,12 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                 node->nodeType = WRITE;
                 vector<Token*>::iterator close_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
                 vector<Token*> passed_list;
+                int start, end;
+                start = std::distance(token_list.begin(),token_list.begin()+1);
+                end = std::distance(token_list.begin(), close_paren);
+                for (int i = start; i < end; ++i){
+                    passed_list.push_back(NULL);
+                }
                 std::move( (token_list.begin() + 1), close_paren, passed_list.begin() );
                 node->C1 = new Tree_Node();
                 node->C1->nodeType = EXPRESSION;
@@ -641,7 +681,13 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                                 node->C1->sValue = second_token->value;
                                 vector<Token*>::iterator close_bracket = std::find_if( token_list.begin(), token_list.end(), IS_RBRACKET );
                                 vector<Token*> passed_list;
-                                std::move( (close_bracket + 1), close_bracket, passed_list.begin() );
+                                int start, end;
+                                start = std::distance(token_list.begin(),close_bracket + 1);
+                                end = std::distance(token_list.begin(), token_list.end());
+                                for (int i = start; i < end; ++i){
+                                    passed_list.push_back(NULL);
+                                }
+                                std::move( (close_bracket + 1), token_list.end(), passed_list.begin() );
                                 token_list.erase( token_list.begin() );
                                 break;
                             }
@@ -657,7 +703,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
                     default:
                     {
-                        cerr << "ERROR: Unhandled second_token type: " << second_token->type << endl;
+                        cerr << "ERROR: Unhandled second_token type: " << second_token->value << endl;
                         exit(-1);
                     }
                 }
@@ -672,6 +718,12 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                 node->nodeType = COMPOUND;
                 vector<Token*>::iterator close_brace = std::find_if( new_token_list.begin(), new_token_list.end(), IS_RBRACE );
                 vector<Token*> passed_list;
+                int start, end;
+                start = std::distance(token_list.begin(),token_list.begin());
+                end = std::distance(token_list.begin(), close_brace);
+                for (int i = start; i < end; ++i){
+                    passed_list.push_back(NULL);
+                }
                 std::move( new_token_list.begin(), close_brace, passed_list.begin() );
                 build_subtree( node, new_token_list );
                 token_list = new_token_list;
@@ -684,6 +736,12 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                 node->C1 = new Tree_Node();
                 vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
                 vector<Token*> passed_list;
+                int start, end;
+                start = std::distance(token_list.begin(),token_list.begin());
+                end = std::distance(token_list.begin(), index);
+                for (int i = start; i < end; ++i){
+                    passed_list.push_back(NULL);
+                }
                 std::move( token_list.begin(), index, passed_list.begin() );
                 find_expression( NULL, node->C1, passed_list );
                 node->C1 = node->C1->sibling;
@@ -696,6 +754,12 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                 node->C1 = new Tree_Node();
                 vector<Token*>::iterator close_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
                 vector<Token*> passed_list;
+                int start, end;
+                start = std::distance(token_list.begin(),token_list.begin() + 1);
+                end = std::distance(token_list.begin(), close_paren);
+                for (int i = start; i < end; ++i){
+                    passed_list.push_back(NULL);
+                }
                 std::move( token_list.begin() + 1, close_paren, passed_list.begin() );
                 token_list.erase( token_list.begin() );
                 node->C1 = node->C1->sibling;
@@ -704,6 +768,11 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                 node->C2->nodeType = COMPOUND;
                 vector<Token*>::iterator close_brace = std::find_if( token_list.begin(), token_list.end(), IS_RBRACE );
                 passed_list.clear();
+                start = std::distance(token_list.begin(),token_list.begin() + 1);
+                end = std::distance(token_list.begin(), close_brace);
+                for (int i = start; i < end; ++i){
+                    passed_list.push_back(NULL);
+                }
                 std::move( token_list.begin() + 1, close_brace, passed_list.begin() );
                 token_list.erase( token_list.begin() );
                 build_subtree( node->C2, passed_list );
@@ -712,6 +781,11 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                 node->C3->nodeType = COMPOUND;
                 close_brace = std::find_if( token_list.begin(), token_list.end(), IS_RBRACE );
                 passed_list.clear();
+                start = std::distance(token_list.begin(),token_list.begin() + 1);
+                end = std::distance(token_list.begin(), close_brace);
+                for (int i = start; i < end; ++i){
+                    passed_list.push_back(NULL);
+                }
                 std::move( token_list.begin() + 1, close_brace, passed_list.begin() );
                 token_list.erase( token_list.begin() );
                 build_subtree( node->C3, passed_list);
@@ -730,6 +804,12 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                         node->nodeType = EXPRESSION;
                         vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
                         vector<Token*> passed_list;
+                        int start, end;
+                        start = std::distance(token_list.begin(),token_list.begin());
+                        end = std::distance(token_list.begin(), index);
+                        for (int i = start; i < end; ++i){
+                            passed_list.push_back(NULL);
+                        }
                         std::move( token_list.begin(), index, passed_list.begin() );
                         find_expression( first_token, node, passed_list);
                         break;
@@ -745,6 +825,12 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                         node->C2 = new Tree_Node();
                         vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
                         vector<Token*> passed_list;
+                        int start, end;
+                        start = std::distance(token_list.begin(),token_list.begin());
+                        end = std::distance(token_list.begin(), index);
+                        for (int i = start; i < end; ++i){
+                            passed_list.push_back(NULL);
+                        }
                         std::move( token_list.begin(), index, passed_list.begin() );
                         node->C2 = node->C2->sibling;
                         break;
@@ -760,6 +846,12 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
                         vector<Token*>::iterator close_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
                         vector<Token*> passed_list;
+                        int start, end;
+                        start = std::distance(token_list.begin(),token_list.begin());
+                        end = std::distance(token_list.begin(), close_paren);
+                        for (int i = start; i < end; ++i){
+                            passed_list.push_back(NULL);
+                        }
                         std::move( token_list.begin(), close_paren, passed_list.begin() );
                         find_arguments( node->C1, passed_list);
                         break;
@@ -767,7 +859,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
                     default:
                     {
-                        cerr << "ERROR: Unhandled second_token type: " << second_token->type << endl;
+                        cerr << "ERROR: Unhandled second_token type: " << second_token->value << endl;
                         exit(-1);
                     }
                 }
@@ -787,6 +879,12 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                 node->C1->nodeType = EXPRESSION;
                 vector<Token*>::iterator close_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
                 vector<Token*> passed_list;
+                int start, end;
+                start = std::distance(token_list.begin(),token_list.begin() + 1);
+                end = std::distance(token_list.begin(), close_paren);
+                for (int i = start; i < end; ++i){
+                    passed_list.push_back(NULL);
+                }
                 std::move( token_list.begin() + 1, close_paren, passed_list.begin() );
                 token_list.erase( token_list.begin() );
                 find_expression( NULL, node->C1, passed_list);
@@ -807,7 +905,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                 {
                     std::advance( index, 1 );
                     position = std::distance( token_list.begin(), index );
-                    Token *token = new Token(token_list.at( position )->type,token_list.front( position )->value);
+                    Token *token = new Token(token_list.at( position )->type,token_list.at( position )->value);
                     switch ( token->type )
                     {
 
@@ -834,6 +932,11 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                 close_brace = index;
                 std::advance( open_brace, 1 );
                 passed_list.clear();
+                start = std::distance(token_list.begin(),open_brace);
+                end = std::distance(token_list.begin(), close_brace);
+                for (int i = start; i < end; ++i){
+                    passed_list.push_back(NULL);
+                }
                 std::move( open_brace, close_brace, passed_list.begin() );
                 token_list.erase( token_list.begin(), open_brace );
                 build_subtree( node->C2, passed_list);
@@ -842,7 +945,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
             default:
             {
-                cerr << "ERROR: Unhandled first_token type: " << first_token->type << endl;
+                cerr << "ERROR: Unhandled first_token type: " << first_token->value << endl;
                 exit(-1);
             }
         }
@@ -863,7 +966,8 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
 void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
-
+    cout << "In build subtree\n";
+    cout << "Root node: " << root_node->nodeType << endl;
     switch( root_node->nodeType )
     {
 
@@ -877,7 +981,7 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
         case PARAMETER_LIST:
         {
             cout << "In PARAMETER LIST" << endl;
-	    Tree_Node *node;
+	        Tree_Node *node;
             node = root_node;
             switch( node->typeSpecifier )
             {
@@ -903,7 +1007,7 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
         case COMPOUND:
         {
             cout << "In COMPOUND" << endl;
-	    root_node->C1 = new Tree_Node();
+	        root_node->C1 = new Tree_Node();
             root_node->C1->nodeType = DECLARATION;
             bool keep_going = true;
             vector<Token*>::iterator index = token_list.begin();
@@ -911,7 +1015,7 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
             do
             {
                 position = std::distance( token_list.begin(), index );
-                Token *token = new Token(token_list.at( position )->type,token_list.front( position )->value);
+                Token *token = new Token(token_list.at( position )->type,token_list.at( position )->value);
                 switch ( token->type )
                 {
                     case INT:
@@ -933,6 +1037,12 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
             if( index != token_list.begin() )
             {
                 vector<Token*> passed_list;
+                int start, end;
+                start = std::distance(token_list.begin(),token_list.begin());
+                end = std::distance(token_list.begin(), index);
+                for (int i = start; i < end; ++i){
+                    passed_list.push_back(NULL);
+                }
                 std::move( token_list.begin(), index, passed_list.begin() );
                 find_siblings( root_node->C1, passed_list);
             }
@@ -946,7 +1056,7 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
         case STATEMENT_LIST:
         {
             cout << "In STATEMENT_LIST" << endl;
-	    find_statement_list_siblings( root_node, token_list );
+	        find_statement_list_siblings( root_node, token_list );
             break;
         }
 

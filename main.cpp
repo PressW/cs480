@@ -4,7 +4,7 @@
 
 
 int main(int argc, char **argv){
-	Scanner *scanner = new Scanner("./tests/test1.cm");
+	Scanner *scanner = new Scanner("./tests/test2.cm");
 	Tree_Node *root = new Tree_Node();
 	root->nodeType = PROGRAM;
 	Token *t;
