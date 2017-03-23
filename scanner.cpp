@@ -1,4 +1,5 @@
 #include "scanner.hpp"
+#include <sstream>
 
 string trim(string s){
     s.erase(s.find_last_not_of(" \n\r\t")+1);
@@ -112,10 +113,23 @@ Scanner::Scanner(string filename){
         //this->all_tokens.push_back(tokens);
     }
 }
+
+bool is_number(string str){
+
+    int i;
+    std::stringstream stream(str);
+    if( !(stream >> i) || str.find('.') != std::string::npos){
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
 Token* Scanner::stringToToken(string tokenString){
     // Token *result = new Token(ERROR,"error");
     //cout << "Token found: " << tokenString << endl;
-    if (regex_match(tokenString,regex("[0-9]+[.]?[0-9]*$"))){
+    if (is_number(tokenString)){
         return new Token(NUMBER, tokenString);
     }
     else {

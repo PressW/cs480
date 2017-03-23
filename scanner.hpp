@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <regex>
+#include <regex.h>
 
 
 using namespace std;

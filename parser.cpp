@@ -1,6 +1,6 @@
 #include "parser.hpp"
 #include <string>
-
+#include <algorithm>
 
 Parser::Parser(){
 
@@ -58,6 +58,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
         // pop first_token off of token_list and switch on its type
         Token *first_token = token_list.at( 0 );
         token_list.erase( token_list.begin() );
+	cout << "Before switch statement" << endl;
         switch( first_token->type )
         {
 
@@ -850,13 +851,15 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
         case PROGRAM:
         {
-            find_siblings( root_node, token_list);
+	    cout << "In PROGRAM" << endl;
+	    find_siblings( root_node, token_list);
             break;
         }
 
         case PARAMETER_LIST:
         {
-            Tree_Node *node = new Tree_Node();
+            cout << "In PARAMETER LIST" << endl;
+	    Tree_Node *node;
             node = root_node;
             switch( node->typeSpecifier )
             {
@@ -881,7 +884,8 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
         case COMPOUND:
         {
-            root_node->C1 = new Tree_Node();
+            cout << "In COMPOUND" << endl;
+	    root_node->C1 = new Tree_Node();
             root_node->C1->nodeType = DECLARATION;
             bool keep_going = true;
             vector<Token*>::iterator index = token_list.begin();
@@ -923,7 +927,8 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
         case STATEMENT_LIST:
         {
-            find_statement_list_siblings( root_node, token_list );
+            cout << "In STATEMENT_LIST" << endl;
+	    find_statement_list_siblings( root_node, token_list );
             break;
         }
 
