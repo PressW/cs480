@@ -4,7 +4,7 @@
 
 
 int main(int argc, char **argv){
-	Scanner *scanner = new Scanner("./tests/test2.cm");
+	Scanner *scanner = new Scanner("./tests/test1.cm");
 	Tree_Node *root = new Tree_Node();
 	root->nodeType = PROGRAM;
 	Token *t;
@@ -15,8 +15,8 @@ int main(int argc, char **argv){
 	}
 	cout << "Building parser\n";
 	Parser *parser = new Parser();
-	//parser->build_subtree(root,scanner->tokens);
-	parser->print_parse_tree();
+	parser->build_subtree(root,scanner->tokens);
+	//parser->print_parse_tree();
 
 
 

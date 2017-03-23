@@ -1063,7 +1063,10 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
                 case INT:
                 {
-                    cout << "build_subtree - case PARAMETER_LIST - case VOID" << endl;
+                    cout << "build_subtree - case PARAMETER_LIST - case INT" << endl;
+                    for (int j = 0; j < token_list.size(); j++){
+                        cout << "after token_list[" << j << "]: " << token_list.at(j)->value << endl;
+                    }
                     find_siblings( node, token_list );
                     break;
                 }
@@ -1074,6 +1077,7 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
                     exit(-1);
                 }
             }
+            break;
         }
 
         case COMPOUND:
