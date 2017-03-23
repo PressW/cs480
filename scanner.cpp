@@ -5,9 +5,6 @@ string trim(string s){
     return s;
 }
 
-Scanner::Scanner(){
-
-}
 Scanner::Scanner(string filename){
     this->filename = filename;
     file.open(filename);

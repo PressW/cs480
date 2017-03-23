@@ -17,7 +17,6 @@ class Scanner{
 		string filename;
 		ifstream file;
 		vector<vector<Token*> > all_tokens;
-		Scanner();
 		Scanner(string filename);
 		~Scanner();
 		Token* stringToToken(string tokenString);

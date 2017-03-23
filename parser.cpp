@@ -53,7 +53,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
     // while token_list is not EMPTY
     while( !token_list.empty() )
     {
-        Tree_Node node;
+        Tree_Node *node;
 
         // pop first_token off of token_list and switch on its type
         Token first_token = token_list.at( 0 );
@@ -75,13 +75,13 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
 
             case INT:
             {
-                node.nodeType = VARIABLE;
-                node.typeSpecifier = INT;
+                node->nodeType = VARIABLE;
+                node->typeSpecifier = INT;
             }
 
             case VOID:
             {
-                node.typeSpecifier = first_token.type;
+                node->typeSpecifier = first_token.type;
                 if( !token_list.empty() )
                 {
                     // pop second_token off of token_list and switch on its type
@@ -92,7 +92,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
 
                         case ID:
                         {
-                            node.sValue = second_token.value;
+                            node->sValue = second_token.value;
                             if( !token_list.empty() )
                             {
                                 // pop third_token off of token_list and switch on its type
@@ -104,7 +104,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                                     case LBRACKET:
                                     {
                                         // pop fourth_token off of token_list and switch on its type
-                                        node.nodeType = ARRAY;
+                                        node->nodeType = ARRAY;
                                         Token fourth_token = token_list.at( 0 );
                                         token_list.erase( token_list.begin() );
                                         switch( fourth_token.type )
@@ -112,7 +112,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
 
                                             case NUMBER:
                                             {
-                                                node.nValue = std::stoi( fourth_token.value );
+                                                node->nValue = std::stoi( fourth_token.value );
                                                 break;
                                             }
 
@@ -128,74 +128,74 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                                             }
                                         }
                                         // set sibling pointer without replacing sibling
-                                        root_node->sibling = &node;
-                                        root_node = &node;
+                                        root_node->sibling = node;
+                                        root_node = node;
                                         break;
                                     }
                                     // LPAREN ->
                                     case LPAREN:
                                     {
                                         // LPAREN means we are declaring a function
-                                        node.nodeType = FUNCTION;
-                                        node.C1 = new Tree_Node();
-                                        node.C1->nodeType = PARAMETER_LIST;
+                                        node->nodeType = FUNCTION;
+                                        node->C1 = new Tree_Node();
+                                        node->C1->nodeType = PARAMETER_LIST;
                                         // Get iterator pointing to first instance of RPAREN
                                         vector<Token>::iterator right_paren = std::find( token_list.begin(), token_list.end(), RPAREN );
                                         if ( right_paren == token_list.end() )
                                         {
-                                            node.C1->typeSpecifier = VOID;
+                                            node->C1->typeSpecifier = VOID;
                                         }
                                         else
                                         {
-                                            node.C1->typeSpecifier = INT;
+                                            node->C1->typeSpecifier = INT;
                                             vector<Token> passed_list;
                                             std::move( token_list.begin(), right_paren, passed_list.begin() );
-                                            build_subtree( node.C1, passed_list );
+                                            build_subtree( node->C1, passed_list );
                                         }
-                                        node.C2 = new Tree_Node();
-                                        node.C2->nodeType = PARAMETER_LIST;
+                                        node->C2 = new Tree_Node();
+                                        node->C2->nodeType = PARAMETER_LIST;
                                         // Get iterator pointing to first instance of LBRACE
                                         vector<Token>::iterator open_brace = std::find( token_list.begin(), token_list.end(), LBRACE );
+                                        
+                                        int num_of_open_braces = 1;
+                                        int num_of_closed_braces = 0;
+                                        vector<Token>::iterator close_brace;
+                                        vector<Token>::iterator index = open_brace;
+                                        do
                                         {
-                                            int num_of_open_braces = 1;
-                                            int num_of_closed_braces = 0;
-                                            vector<Token>::iterator close_brace;
-                                            vector<Token>::iterator index = open_brace;
-                                            do
+                                            index += 1;
+                                            int position = std::distance( token_list.begin(), index );
+                                            if( position == token_list.size() )
                                             {
-                                                index += 1;
-                                                int position = std::distance( token_list.begin(), index )
-                                                if( position == token_list.size() )
+                                                cerr << "ERROR: Parenthesis mismatch" << endl;
+                                                exit(-1);
+                                            }
+                                            Token token = token_list.at( position );
+                                            switch( token.type )
+                                            {
+                                                case LBRACE:
                                                 {
-                                                    cerr << "ERROR: Parenthesis mismatch" << endl;
-                                                    exit(-1);
+                                                    num_of_open_braces += 1;
+                                                    break;
                                                 }
-                                                Token token = token_list.at( position );
-                                                switch( token.type )
+
+                                                case RBRACE:
                                                 {
-                                                    case LBRACE:
-                                                    {
-                                                        num_of_open_braces += 1;
-                                                        break;
-                                                    }
+                                                    num_of_closed_braces += 1;
+                                                    break;
+                                                }
 
-                                                    case RBRACE:
-                                                    {
-                                                        num_of_closed_braces += 1;
-                                                        break;
-                                                    }
-
-                                                    default:
-                                                    {
-                                                        break;
-                                                    }
+                                                default:
+                                                {
+                                                    break;
                                                 }
                                             }
-                                            while ( num_of_open_braces != num_of_closed_braces );
-                                            close_brace = index;
-                                            // skip the opening brace {
-                                            open_brace += 1;
                                         }
+                                        while ( num_of_open_braces != num_of_closed_braces );
+                                        close_brace = index;
+                                        // skip the opening brace {
+                                        open_brace += 1;
+                                        
                                         vector<Token> passed_list;
                                         std::move( open_brace, close_brace, passed_list.begin() );
                                         build_subtree( node->C2, passed_list );
@@ -222,7 +222,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token> token_list ){
                             }
                             else
                             {
-                                root->sibling = node;
+                                root_node->sibling = node;
                                 root_node = node;
                             }
                             break;
@@ -259,7 +259,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token> token_list ){
 
     while( !token_list.empty() )
     {
-        Trea_Node node;
+        Tree_Node *node;
         Token first_token = token_list.at( 0 );
         token_list.erase( token_list.begin() );
         switch( first_token.type )
@@ -303,7 +303,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token> token_list ){
                 if( token_list.empty() )
                 {
                     node->nodeType = VARIABLE;
-                    node.sValue = first_token.value;
+                    node->sValue = first_token.value;
                 }
                 else
                 {
@@ -314,7 +314,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token> token_list ){
                         case COMMA:
                         {
                             node->nodeType = VARIABLE;
-                            node.sValue = first_token.value;
+                            node->sValue = first_token.value;
                             break;
                         }
 
@@ -340,8 +340,8 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token> token_list ){
 
 
 
-void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token> token_list ){
-
+void Parser::find_expression(Token first_token, Tree_Node *root_node, vector<Token> token_list ){
+    Tree_Node *node = new Tree_Node();
     while( !token_list.empty() )
     {
         if( first_token == NULL )
@@ -350,23 +350,23 @@ void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token
             token_list.erase( token_list.begin() );
         }
 
-        Tree_Node node = new Tree_Node();
+        
         node->nodeType = EXPRESSION;
-        node.C1 = new Tree_Node();
-        node.C1->sValue = first_token.value();
+        node->C1 = new Tree_Node();
+        node->C1->sValue = first_token.value;
         switch( first_token.type )
         {
 
             case NUMBER:
             {
-                node.C1->nodeType = NUMBER;
-                node.C1->typeSpecifier = INT;
-                node.C1.nValue = std::stoi( first_token.value );
+                node->C1->nodeType = NUMBER;
+                node->C1->typeSpecifier = INT;
+                node->C1->nValue = std::stoi( first_token.value );
                 break;
             }
 
             case ID:
-                node.C1->nodeType = VARIABLE;
+                node->C1->nodeType = VARIABLE;
                 if( !token_list.empty() )
                 {
                     Token second_token = token_list.at( 0 );
@@ -376,7 +376,7 @@ void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token
 
                         case LBRACKET:
                         {
-                            node.C1->nodeType = ARRAY;
+                            node->C1->nodeType = ARRAY;
                             Token third_token = token_list.at( 0 );
                             token_list.erase( token_list.begin() );
                             switch( third_token.type )
@@ -384,7 +384,7 @@ void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token
 
                                 case INT:
                                 {
-                                    node.C1->nValue = std::stoi( third_token.value );
+                                    node->C1->nValue = std::stoi( third_token.value );
                                     token_list.erase( token_list.begin() );
                                     break;
                                 }
@@ -394,8 +394,8 @@ void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token
                                     vector<Token>::iterator index = std::find( token_list.begin(), token_list.end(), SEMI );
                                     vector<Token> passed_list;
                                     std::move( (token_list.begin() + 1), index, passed_list.begin() );
-                                    find_expression( third_token, node.C1, passed_list);
-                                    node.C1 = node.C1->sibling;
+                                    find_expression( third_token, node->C1, passed_list);
+                                    node->C1 = node->C1->sibling;
                                     break;
                                 }
 
@@ -411,22 +411,22 @@ void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token
                         case MINUS:
                         {
                             node->nodeType = MINUS;
-                            node.C2 = new Tree_Node();
+                            node->C2 = new Tree_Node();
                             vector<Token>::iterator index = std::find( token_list.begin(), token_list.end(), MINUS );
-                            find_expression(NULL, node.C2, token_list);
+                            find_expression(NULL, node->C2, token_list);
                             token_list.erase( token_list.begin(), index );
-                            node.C2 = node.C2->sibling;
+                            node->C2 = node->C2->sibling;
                             break;
                         }
 
                         case LS:
                         {
                             node->nodeType = LS;
-                            node.C2 = new Tree_Node();
+                            node->C2 = new Tree_Node();
                             vector<Token>::iterator index = std::find( token_list.begin(), token_list.end(), SEMI );
-                            find_expression(NULL, node.C2, token_list);
+                            find_expression(NULL, node->C2, token_list);
                             token_list.erase( token_list.begin(), index );
-                            node.C2 = node.C2->sibling;
+                            node->C2 = node->C2->sibling;
                             break;
                         }
 
@@ -440,20 +440,20 @@ void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token
                                 case NUMBER:
                                 {
                                     node->nodeType = ASSIGN;
-                                    node.C2 = new Tree_Node();
-                                    node.C2->nodeType = NUMBER;
-                                    node.C2->typeSpecifier = INT;
-                                    node.C2->nValue = std:stoi( third_token.value );
+                                    node->C2 = new Tree_Node();
+                                    node->C2->nodeType = NUMBER;
+                                    node->C2->typeSpecifier = INT;
+                                    node->C2->nValue = stoi( third_token.value );
                                     break;
                                 }
 
                                 case ID:
                                 {
-                                    node.C2 = new Tree_Node();
+                                    node->C2 = new Tree_Node();
                                     if ( token_list.empty() )
                                     {
-                                        node.C2->nodeType = VARIABLE;
-                                        node.C2->sValue = third_token.value;
+                                        node->C2->nodeType = VARIABLE;
+                                        node->C2->sValue = third_token.value;
                                     }
                                     else
                                     {
@@ -464,56 +464,57 @@ void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token
 
                                             case LPAREN:
                                             {
-                                                node.C2->nodeType = CALL;
-                                                node.C2->sValue = third_token.value;
-                                                node.C2->typeSpecifier = INT;
-                                                node.C2->C1 = new Tree_Node();
-                                                node.C2->C1->nodeType = ARGUMENTS;
+                                                node->C2->nodeType = CALL;
+                                                node->C2->sValue = third_token.value;
+                                                node->C2->typeSpecifier = INT;
+                                                node->C2->C1 = new Tree_Node();
+                                                node->C2->C1->nodeType = ARGUMENTS;
                                                 vector<Token>::iterator right_paren = std::find( token_list.begin(), token_list.end(), RPAREN );
                                                 vector<Token> passed_list;
                                                 std::move( token_list.begin(), right_paren, passed_list.begin() );
-                                                find_arguments(node.C2->C1, passed_list)
+                                                find_arguments(node->C2->C1, passed_list);
                                                 break;
                                             }
 
                                             case SEMI:
                                             {
-                                                node.C2->nodeType = VARIABLE;
-                                                node.C2->sValue = third_token.value;
+                                                node->C2->nodeType = VARIABLE;
+                                                node->C2->sValue = third_token.value;
                                                 break;
                                             }
 
                                             case LBRACKET:
                                             {
-                                                node.C2->nodeType = ARRAY;
-                                                node.C2->sValue = third_token.value;
-                                                node.C2->C1 = new Tree_Node();
+                                                node->C2->nodeType = ARRAY;
+                                                node->C2->sValue = third_token.value;
+                                                node->C2->C1 = new Tree_Node();
                                                 vector<Token>::iterator right_bracket = std::find( token_list.begin(), token_list.end(), RBRACKET );
                                                 vector<Token> passed_list;
                                                 std::move( token_list.begin(), right_bracket, passed_list.begin() );
-                                                find_expression( NULL, node.C2->C1, passed_list );
-                                                node.C2->C1 = node.C2->C1->sibling;
+                                                find_expression( NULL, node->C2->C1, passed_list );
+                                                node->C2->C1 = node->C2->C1->sibling;
                                                 break;
                                             }
 
                                             case PLUS:
                                             {
-                                                node.C2->nodeType = PLUS;
-                                                node.C2->C1 = &node;
-                                                Tree_Node temp_node = node.C2;
-                                                node.C2 = NULL;
-                                                node.C2 = new Tree_Node();
+                                                node->C2->nodeType = PLUS;
+                                                node->C2->C1 = node;
+                                                Tree_Node *temp_node = node->C2;
+                                                node->C2 = NULL;
+                                                node->C2 = new Tree_Node();
                                                 vector<Token>::iterator index = token_list.end();
+                                                vector<Token> passed_list;
                                                 std::move( token_list.begin(), index, passed_list.begin() );
-                                                find_expression(NULL, node.C2, passed_list);
-                                                node.C2 = &node.C2->sibling;
-                                                if( node.C1->typeSpecifier == EXPRESSION && node.C1->C1 != NULL && node.C1->C2 == NULL)
+                                                find_expression(NULL, node->C2, passed_list);
+                                                node->C2 = node->C2->sibling;
+                                                if( node->C1->typeSpecifier == EXPRESSION && node->C1->C1 != NULL && node->C1->C2 == NULL)
                                                 {
-                                                    node.C1 = &node.C1->C1
+                                                    node->C1 = node->C1->C1;
                                                 }
-                                                if( node.C2->typeSpecifier == EXPRESSION && node.C2->C1 != NULL && node.C2->C2 == NULL)
+                                                if( node->C2->typeSpecifier == EXPRESSION && node->C2->C1 != NULL && node->C2->C2 == NULL)
                                                 {
-                                                    node.C2 = &node.C2->C1
+                                                    node->C2 = node->C2->C1;
                                                 }
                                                 break;
                                             }
@@ -544,14 +545,15 @@ void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token
                         }
                     }
                 }
-                break;
+                // break;
+                default:
+                {
+                    cerr << "ERROR: Unhandled first_token type: " << first_token.type << endl;
+                    exit(-1);
+                }
             }
-
-            default:
-            {
-               cerr << "ERROR: Unhandled first_token type: " << first_token.type << endl;
-               exit(-1);
-            }
+            
+            
         }
 
         while( !token_list.empty() && ( token_list.at(0).type == SEMI ) )
@@ -559,15 +561,15 @@ void Parser::find_expression(Token first_token, Tree_Node *root_node, list<Token
             token_list.erase( token_list.begin() );
         }
 
-        root_node->sibling = &node;
-        root_node = &node;
+        root_node->sibling = node;
+        root_node = node;
         first_token = NULL;
-    }
+    //}
 }
 
 
 
-void Parser::find_statement_list_siblings(Tree_Node root_node, list<Token> token_list ){
+void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token> token_list ){
 
     // while token_list is not EMPTY
         // create new node
@@ -725,7 +727,7 @@ void Parser::find_statement_list_siblings(Tree_Node root_node, list<Token> token
 
 
 
-void Parser::build_subtree(Tree_Node root_node, list<Token> token_list ){
+void Parser::build_subtree(Tree_Node *root_node, vector<Token> token_list ){
 
     // switch on root_node.type
         // PROGRAM -->

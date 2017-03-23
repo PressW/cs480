@@ -6,8 +6,7 @@
 int main(int argc, char **argv){
 	Scanner *scanner = new Scanner("./tests/test1.cm");
 	Parser *parser = new Parser();
-
-	cout << "ARGUMENTS: " << ARGUMENTS << endl;
+	//parser->parse();
 
 
 	delete scanner;
