@@ -50,6 +50,10 @@ void Parser::show_tree( Tree_Node *root_node, string prefix ){
 
 void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
+    for (int j = 0; j < token_list.size(); j++){
+        cout << "\t\t\t\tfind_siblings: token_list[" << j << "]: " << token_list.at(j)->value << endl;
+    }
+    
     // while token_list is not EMPTY
     cout << "find_siblings" << endl;
     while( !token_list.empty() )
@@ -91,13 +95,8 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                 if( !token_list.empty() )
                 {
                     // pop second_token off of token_list and switch on its type
-                    cout << "Tokenlist size: " << token_list.size() << endl;
-                    cout << "Token type: " << token_list.at(45) << endl;
-                    cout << "Token value: " << token_list.front() << endl;
                     Token *second_token = new Token(token_list.front()->type,token_list.front()->value);
-                    cout << "Erasing\n";
                     token_list.erase( token_list.begin() );
-                    cout << "\t\tSwitch\n" << second_token->type << "^^^\n";
                     switch( second_token->type )
                     {
 
@@ -105,10 +104,8 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                         {
                             cout << "find_siblings - case VOID - case ID" << endl;
                             node->sValue = second_token->value;
-                            cout << "Got second token\n";
                             if( !token_list.empty() )
                             {
-                                cout << "\t\tToken list not empty\n";
                                 // pop third_token off of token_list and switch on its type
                                 Token *third_token = new Token(token_list.front()->type,token_list.front()->value);
                                 token_list.erase( token_list.begin() );
@@ -149,7 +146,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                         root_node = node;
                                         break;
                                     }
-                                    // LPAREN ->
+
                                     case LPAREN:
                                     {
                                         cout << "find_siblings - case VOID - case ID - case LPAREN" << endl;
@@ -173,18 +170,18 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                             for (int i = start; i < end; ++i){
                                                 passed_list.push_back(NULL);
                                             }
-                                            for (int j = 0; j < 5; j++){
-                                                cout << "before token_list[" << j << "]: " << token_list.at(j)->value << endl;
-                                            }
+//                                            for (int j = 0; j < 5; j++){
+//                                                cout << "before token_list[" << j << "]: " << token_list.at(j)->value << endl;
+//                                            }
                                             std::move( token_list.begin(), right_paren, passed_list.begin() );
                                             token_list.erase( token_list.begin() );
-                                            for (int j = 0; j < 5; j++){
-                                                cout << "after token_list[" << j << "]: " << token_list.at(j)->value << endl;
-                                            }
+//                                            for (int j = 0; j < 5; j++){
+//                                                cout << "after token_list[" << j << "]: " << token_list.at(j)->value << endl;
+//                                            }
                                             build_subtree( node->C1, passed_list );
-                                            for (int j = 0; j < 5; j++){
-                                                cout << "completed token_list[" << j << "]: " << token_list.at(j)->value << endl;
-                                            }
+//                                            for (int j = 0; j < 5; j++){
+//                                                cout << "completed token_list[" << j << "]: " << token_list.at(j)->value << endl;
+//                                            }
                                         }
                                         node->C2 = new Tree_Node();
                                         node->C2->nodeType = COMPOUND;
@@ -195,9 +192,6 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                         int num_of_closed_braces = 0;
                                         vector<Token*>::iterator close_brace;
                                         vector<Token*>::iterator index = open_brace;
-                                        // cout << "Top of token list: " << token_list.front()->value << endl;
-                                        // token_list.erase(token_list.begin());
-                                        // cout << "Top of token list AGAIN: " << token_list.front()->value << endl;
                                         do
                                         {
                                             index += 1;
@@ -261,7 +255,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
                                     default:
                                     {
-                                        cerr << "ERROR: Unhandled third_token type: " << third_token->value << endl;
+                                        cerr << "ERROR: Unhandled third_token type in 'find_siblings - case VOID - case ID' " << third_token->value << endl;
                                         exit(-1);
                                     }
                                 }
@@ -278,7 +272,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
                         default:
                         {
-                            cerr << "ERROR: Unhandled second_token type: " << second_token->value << endl;
+                            cerr << "ERROR: Unhandled second_token type in 'find_siblings - case VOID' " << second_token->value << endl;
                             exit(-1);
                         }
                     }
@@ -294,7 +288,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
             default:
             {
-                cerr << "ERROR: Unhandled first_token type: " << first_token->value << endl;
+                cerr << "ERROR: Unhandled first_token type in 'find_siblings' " << first_token->value << endl;
                 exit(-1);
             }
         }
@@ -342,7 +336,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
 
                         default:
                         {
-                            cerr << "ERROR: Unhandled second_token type: " << second_token->value << endl;
+                            cerr << "ERROR: Unhandled second_token type in 'find_arguments - case NUMBER' " << second_token->value << endl;
                             exit(-1);
                         }
                     }
@@ -373,7 +367,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
 
                         default:
                         {
-                            cerr << "ERROR: Unhandled second_token type: " << second_token->value << endl;
+                            cerr << "ERROR: Unhandled second_token type 'find_arguments - case ID' " << second_token->value << endl;
                             exit(-1);
                         }
                     }
@@ -382,7 +376,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
             }
             default:
             {
-                cerr << "ERROR: Unhandled first_token type: " << first_token->value << endl;
+                cerr << "ERROR: Unhandled first_token type in find_arguments' " << first_token->value << endl;
                 exit(-1);
             }
         }
@@ -771,14 +765,17 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
             {
                 cout << "find_statement_list_siblings - case INT" << endl;
                 vector<Token*> new_token_list;
-                new_token_list.insert( new_token_list.begin(), first_token );
+                new_token_list.push_back( first_token );
                 std::copy( token_list.begin(), token_list.end(), (new_token_list.begin() + 1) );
                 node->nodeType = COMPOUND;
+                for (int j = 0; j < token_list.size(); j++){
+                    new_token_list.push_back( token_list.at(j) );
+                }
                 vector<Token*>::iterator close_brace = std::find_if( new_token_list.begin(), new_token_list.end(), IS_RBRACE );
                 vector<Token*> passed_list;
                 int start, end;
-                start = std::distance(token_list.begin(),token_list.begin());
-                end = std::distance(token_list.begin(), close_brace);
+                start = std::distance(new_token_list.begin(),new_token_list.begin());
+                end = std::distance(new_token_list.begin(), close_brace);
                 for (int i = start; i < end; ++i){
                     passed_list.push_back(NULL);
                 }
@@ -1036,8 +1033,11 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
     cout << "build_subtree" << endl;
-    cout << "Root node: " << root_node->nodeType << endl;
-    cout << "Top of token list (subtree): " << token_list.front()->value << endl;
+    
+    for (int j = 0; j < token_list.size(); j++){
+        cout << "\t\t\t\tfind_siblings: token_list[" << j << "]: " << token_list.at(j)->value << endl;
+    }
+    
     switch( root_node->nodeType )
     {
 
@@ -1064,9 +1064,6 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
                 case INT:
                 {
                     cout << "build_subtree - case PARAMETER_LIST - case INT" << endl;
-                    for (int j = 0; j < token_list.size(); j++){
-                        cout << "after token_list[" << j << "]: " << token_list.at(j)->value << endl;
-                    }
                     find_siblings( node, token_list );
                     break;
                 }
