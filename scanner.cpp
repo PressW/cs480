@@ -102,6 +102,9 @@ Scanner::Scanner(string filename){
                     token_string = "";
                     break;
                 case '=':
+                    if (data[c+1] == '='){
+                        break;
+                    }
                     tokens.push_back(stringToToken(token_string));
                     token_string = "";
                     break;
