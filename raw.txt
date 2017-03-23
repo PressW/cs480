@@ -704,154 +704,175 @@ Rename: null
                             Value: 0
                             Data Type: unknown
                             Rename: null 
-                            
-Sibling
-Node Type: Array
-Line Number: 35
-Name: a
-Value: 0
-Data Type: int
-Rename: tmpVar000007
-Sibling
-Node Type: Variable
-Line Number: 35
-Name: i
-Value: 0
-Data Type: int
-Rename: tmpVar0000010
-Sibling
-Node Type: Variable
-Line Number: 35
-Name: high
-Value: 0
-Data Type: int
-Rename: tmpVar000009
-Sibling
-Node Type: =
-Line Number: 36
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-C1
-Node Type: Variable
-Line Number: 36
-Name: t
-Value: 0
-Data Type: int
-Rename: tmpVar0000013
-C2
-Node Type: Array
-Line Number: 36
-Name: a
-Value: 0
-Data Type: int
-Rename: tmpVar000007
-C1
-Node Type: Variable
-Line Number: 36
-Name: k
-Value: 0
-Data Type: int
-Rename: tmpVar0000011 
-Sibling
-Node Type: =
-Line Number: 37
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-C1
-Node Type: Array
-Line Number: 37
-Name: a
-Value: 0
-Data Type: int
-Rename: tmpVar000007
-C1
-Node Type: Variable
-Line Number: 37
-Name: k
-Value: 0
-Data Type: int
-Rename: tmpVar0000011
-C2
-Node Type: Array
-Line Number: 37
-Name: a
-Value: 0
-Data Type: int
-Rename: tmpVar000007
-C1
-Node Type: Variable
-Line Number: 37
-Name: i
-Value: 0
-Data Type: int
-Rename: tmpVar0000010
-Sibling
-Node Type: =
-Line Number: 38
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-C1
-Node Type: Array
-Line Number: 38
-Name: a
-Value: 0
-Data Type: int
-Rename: tmpVar000007 
-C1
-Node Type: Variable
-Line Number: 38
-Name: i
-Value: 0
-Data Type: int
-Rename: tmpVar0000010
-C2
-Node Type: Variable
-Line Number: 38
-Name: t
-Value: 0
-Data Type: int
-Rename: tmpVar0000013
-Sibling
-Node Type: =
-Line Number: 39
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-C1
-Node Type: Variable
-Line Number: 39
-Name: i
-Value: 0
-Data Type: int
-Rename: tmpVar0000010
-C2
-Node Type: +
-Line Number: 39
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-C1
-Node Type: Variable
-Line Number: 39
-Name: i
-Value: 0
-Data Type: int
-Rename: tmpVar0000010
-C2
-Node Type: a number
-Line Number: 39
-Name: null
-Value: 1
-Data Type: int
-Rename: null
+
+                            Sibling
+                            Node Type: Array
+                            Line Number: 35
+                            Name: a
+                            Value: 0
+                            Data Type: int
+                            Rename: tmpVar000007
+
+                            Sibling
+                            Node Type: Variable
+                            Line Number: 35
+                            Name: i
+                            Value: 0
+                            Data Type: int
+                            Rename: tmpVar0000010
+
+                            Sibling
+                            Node Type: Variable
+                            Line Number: 35
+                            Name: high
+                            Value: 0
+                            Data Type: int
+                            Rename: tmpVar000009
+
+                    Sibling
+                    Node Type: =
+                    Line Number: 36
+                    Name: null
+                    Value: 0
+                    Data Type: unknown
+                    Rename: null
+
+                        C1
+                        Node Type: Variable
+                        Line Number: 36
+                        Name: t
+                        Value: 0
+                        Data Type: int
+                        Rename: tmpVar0000013
+
+                        C2
+                        Node Type: Array
+                        Line Number: 36
+                        Name: a
+                        Value: 0
+                        Data Type: int
+                        Rename: tmpVar000007
+
+                            C1
+                            Node Type: Variable
+                            Line Number: 36
+                            Name: k
+                            Value: 0
+                            Data Type: int
+                            Rename: tmpVar0000011 
+
+                    Sibling
+                    Node Type: =
+                    Line Number: 37
+                    Name: null
+                    Value: 0
+                    Data Type: unknown
+                    Rename: null
+
+                        C1
+                        Node Type: Array
+                        Line Number: 37
+                        Name: a
+                        Value: 0
+                        Data Type: int
+                        Rename: tmpVar000007
+
+                            C1
+                            Node Type: Variable
+                            Line Number: 37
+                            Name: k
+                            Value: 0
+                            Data Type: int
+                            Rename: tmpVar0000011
+
+                        C2
+                        Node Type: Array
+                        Line Number: 37
+                        Name: a
+                        Value: 0
+                        Data Type: int
+                        Rename: tmpVar000007
+
+                            C1
+                            Node Type: Variable
+                            Line Number: 37
+                            Name: i
+                            Value: 0
+                            Data Type: int
+                            Rename: tmpVar0000010
+
+                    Sibling
+                    Node Type: =
+                    Line Number: 38
+                    Name: null
+                    Value: 0
+                    Data Type: unknown
+                    Rename: null
+
+                        C1
+                        Node Type: Array
+                        Line Number: 38
+                        Name: a
+                        Value: 0
+                        Data Type: int
+                        Rename: tmpVar000007 
+
+                            C1
+                            Node Type: Variable
+                            Line Number: 38
+                            Name: i
+                            Value: 0
+                            Data Type: int
+                            Rename: tmpVar0000010
+
+                        C2
+                        Node Type: Variable
+                        Line Number: 38
+                        Name: t
+                        Value: 0
+                        Data Type: int
+                        Rename: tmpVar0000013
+
+                    Sibling
+                    Node Type: =
+                    Line Number: 39
+                    Name: null
+                    Value: 0
+                    Data Type: unknown
+                    Rename: null
+
+                        C1
+                        Node Type: Variable
+                        Line Number: 39
+                        Name: i
+                        Value: 0
+                        Data Type: int
+                        Rename: tmpVar0000010
+
+                        C2
+                        Node Type: +
+                        Line Number: 39
+                        Name: null
+                        Value: 0
+                        Data Type: unknown
+                        Rename: null
+
+                            C1
+                            Node Type: Variable
+                            Line Number: 39
+                            Name: i
+                            Value: 0
+                            Data Type: int
+                            Rename: tmpVar0000010
+
+                            C2
+                            Node Type: a number
+                            Line Number: 39
+                            Name: null
+                            Value: 1
+                            Data Type: int
+                            Rename: null
+
 Sibling
 Node Type: Function
 Line Number: 43
@@ -859,97 +880,111 @@ Name: main
 Value: 0
 Data Type: void
 Rename: null
-C1
-Node Type: Parameter List
-Line Number: 43
-Name: null
-Value: 0
-Data Type: void
-Rename: null
-C2
-Node Type: Compound Statement
-Line Number: 43
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-C1
-Node Type: Declaration
-Line Number: 44
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-Sibling
-Node Type: Variable
-Line Number: 44
-Name: i
-Value: 0
-Data Type: int
-Rename: tmpVar0000014
-C2
-Node Type: Statement List
-Line Number: 45
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-Sibling
-Node Type: =
-Line Number: 45
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-C1
-Node Type: Variable
-Line Number: 45
-Name: i
-Value: 0
-Data Type: int
-Rename: tmpVar0000014
-C2
-Node Type: a number
-Line Number: 45
-Name: null
-Value: 0
-Data Type: int
-Rename: null
-Sibling
-Node Type: while
-Line Number: 47
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-C1
-Node Type: <
-Line Number: 47
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null
-C1
-Node Type: Variable
-Line Number: 47
-Name: i
-Value: 0
-Data Type: int
-Rename: tmpVar0000014
-C2
-Node Type: a number
-Line Number: 47
-Name: null
-Value: 10
-Data Type: int
-Rename: null
-C2
-Node Type: Compound Statement
-Line Number: 47
-Name: null
-Value: 0
-Data Type: unknown
-Rename: null 
+
+    C1
+    Node Type: Parameter List
+    Line Number: 43
+    Name: null
+    Value: 0
+    Data Type: void
+    Rename: null
+
+    C2
+    Node Type: Compound Statement
+    Line Number: 43
+    Name: null
+    Value: 0
+    Data Type: unknown
+    Rename: null
+
+        C1
+        Node Type: Declaration
+        Line Number: 44
+        Name: null
+        Value: 0
+        Data Type: unknown
+        Rename: null
+
+        Sibling
+        Node Type: Variable
+        Line Number: 44
+        Name: i
+        Value: 0
+        Data Type: int
+        Rename: tmpVar0000014
+
+        C2
+        Node Type: Statement List
+        Line Number: 45
+        Name: null
+        Value: 0
+        Data Type: unknown
+        Rename: null
+
+        Sibling
+        Node Type: =
+        Line Number: 45
+        Name: null
+        Value: 0
+        Data Type: unknown
+        Rename: null
+
+            C1
+            Node Type: Variable
+            Line Number: 45
+            Name: i
+            Value: 0
+            Data Type: int
+            Rename: tmpVar0000014
+
+            C2
+            Node Type: a number
+            Line Number: 45
+            Name: null
+            Value: 0
+            Data Type: int
+            Rename: null
+
+        Sibling
+        Node Type: while
+        Line Number: 47
+        Name: null
+        Value: 0
+        Data Type: unknown
+        Rename: null
+
+            C1
+            Node Type: <
+            Line Number: 47
+            Name: null
+            Value: 0
+            Data Type: unknown
+            Rename: null
+
+                C1
+                Node Type: Variable
+                Line Number: 47
+                Name: i
+                Value: 0
+                Data Type: int
+                Rename: tmpVar0000014
+
+                C2
+                Node Type: a number
+                Line Number: 47
+                Name: null
+                Value: 10
+                Data Type: int
+                Rename: null
+
+            C2
+            Node Type: Compound Statement
+            Line Number: 47
+            Name: null
+            Value: 0
+            Data Type: unknown
+            Rename: null 
+--------------20
 C1
 Node Type: Declaration
 Line Number: 48
