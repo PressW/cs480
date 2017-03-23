@@ -15,7 +15,8 @@ int main(int argc, char **argv){
 	}
 	cout << "Building parser\n";
 	Parser *parser = new Parser();
-	parser->build_subtree(root,scanner->tokens);
+	//parser->build_subtree(root,scanner->tokens);
+	parser->print_parse_tree();
 
 
 

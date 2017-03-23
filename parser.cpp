@@ -391,7 +391,18 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
     }
 }
 
-
+void Parser::print_parse_tree(){
+    ifstream file;
+    file.open("raw.txt");
+    if (!file.is_open()){
+        cout << "Error Parsing" << endl;
+        return;
+    }
+    string s;
+    while(getline(file,s)){
+        cout << s << endl;;
+    }
+}
 
 void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<Token*> token_list ){
 
