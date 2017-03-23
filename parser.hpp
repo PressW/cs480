@@ -24,5 +24,6 @@ bool IS_LBRACE(Token *t);
 bool IS_RBRACE(Token *t);
 bool IS_SEMI(Token *t);
 bool IS_MINUS(Token *t);
+bool IS_MULT(Token *t);
 bool IS_NEQ(Token *t);
 bool IS_RBRACKET(Token *t);

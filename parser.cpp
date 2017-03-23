@@ -498,6 +498,18 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
                             node->C2 = node->C2->sibling;
                             break;
                         }
+                            
+                        case MULT:
+                        {
+                            cout << "find_expression - case ID - case MULT" << endl;
+                            node->nodeType = MULT;
+                            node->C2 = new Tree_Node();
+                            vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_MULT );
+                            find_expression(NULL, node->C2, token_list);
+                            token_list.erase( token_list.begin(), index );
+                            node->C2 = node->C2->sibling;
+                            break;
+                        }
 
                         case LS:
                         {
@@ -515,6 +527,18 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
                         {
                             cout << "find_expression - case ID - case NEQ" << endl;
                             node->nodeType = NEQ;
+                            node->C2 = new Tree_Node();
+                            vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
+                            find_expression(NULL, node->C2, token_list);
+                            token_list.erase( token_list.begin(), index );
+                            node->C2 = node->C2->sibling;
+                            break;
+                        }
+                            
+                        case EQ:
+                        {
+                            cout << "find_expression - case ID - case EQ" << endl;
+                            node->nodeType = EQ;
                             node->C2 = new Tree_Node();
                             vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
                             find_expression(NULL, node->C2, token_list);
@@ -708,19 +732,86 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
             {
                 cout << "find_statement_list_siblings - case WRITE" << endl;
                 node->nodeType = WRITE;
-                vector<Token*>::iterator close_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
-                vector<Token*> passed_list;
-                int start, end;
-                start = std::distance(token_list.begin(),token_list.begin()+1);
-                end = std::distance(token_list.begin(), close_paren);
-                for (int i = start; i < end; ++i){
-                    passed_list.push_back(NULL);
+                Token *second_token = new Token(token_list.front()->type,token_list.front()->value);
+                token_list.erase( token_list.begin() );
+                switch( second_token->type )
+                {
+                    
+                    case LPAREN:
+                    {
+                        vector<Token*>::iterator close_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
+                        vector<Token*> passed_list;
+                        int start, end;
+                        start = std::distance(token_list.begin(),token_list.begin()+1);
+                        end = std::distance(token_list.begin(), close_paren);
+                        for (int i = start; i < end; ++i){
+                        passed_list.push_back(NULL);
+                        }
+                        std::move( (token_list.begin() + 1), close_paren, passed_list.begin() );
+                        token_list.erase( token_list.begin(), close_paren );
+                        node->C1 = new Tree_Node();
+                        node->C1->nodeType = EXPRESSION;
+                        find_expression( NULL, node->C1, passed_list);
+                        break;
+                    }
+                        
+                    case ID:
+                    {
+                        cout << "find_statement_list_siblings - case WRITE - case ID" << endl;
+                        Token *third_token = new Token(token_list.front()->type,token_list.front()->value);
+                        token_list.erase( token_list.begin() );
+                        node->C1 = new Tree_Node();
+                        switch( third_token->type )
+                        {
+                                
+                            case ID:
+                            {
+                                cout << "find_statement_list_siblings - case WRITE - case ID - case ID" << endl;
+                                node->C1->nodeType = VARIABLE;
+                                node->C1->nValue = std::stoi( second_token->value );
+                                break;
+                            }
+                                
+                            case LBRACKET:
+                            {
+                                cout << "find_statement_list_siblings - case WRITE - case ID - case ID" << endl;
+                                node->C1->nodeType = ARRAY;
+                                node->C1->sValue = second_token->value;
+                                vector<Token*>::iterator close_bracket = std::find_if( token_list.begin(), token_list.end(), IS_RBRACKET );
+                                vector<Token*> passed_list;
+                                int start, end;
+                                start = std::distance(token_list.begin(),close_bracket + 1);
+                                end = std::distance(token_list.begin(), token_list.end());
+                                for (int i = start; i < end; ++i){
+                                    passed_list.push_back(NULL);
+                                }
+                                std::move( (close_bracket + 1), token_list.end(), passed_list.begin() );
+                                token_list.erase( close_bracket + 1, token_list.end() );
+                                //token_list.erase( token_list.begin() );
+                                break;
+                            }
+                                
+                            case SEMI:
+                            {
+                                cout << "find_siblings - case WRITE - case ID - case SEMI" << endl;
+                                break;
+                            }
+                                
+                            default:
+                            {
+                                cerr << "ERROR: Unhandled third_token type: " << third_token->value << endl;
+                                exit(-1);
+                            }
+                        }
+                        break;
+                    }
+                        
+                    default:
+                    {
+                        cerr << "ERROR: Unhandled second_token type: " << second_token->value << endl;
+                        exit(-1);
+                    }
                 }
-                std::move( (token_list.begin() + 1), close_paren, passed_list.begin() );
-                token_list.erase( token_list.begin(), close_paren );
-                node->C1 = new Tree_Node();
-                node->C1->nodeType = EXPRESSION;
-                find_expression( NULL, node->C1, passed_list);
                 break;
             }
 
@@ -771,7 +862,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                                 
                             case SEMI:
                             {
-                                cout << "find_siblings - case SEMI" << endl;
+                                cout << "find_siblings - case READ - case ID - case SEMI" << endl;
                                 break;
                             }
 
@@ -1204,6 +1295,9 @@ bool IS_SEMI(Token *t){
 }
 bool IS_MINUS(Token *t){
     return (t->type == MINUS);
+}
+bool IS_MULT(Token *t){
+    return (t->type == MULT);
 }
 bool IS_NEQ(Token *t){
     return (t->type == NEQ);
