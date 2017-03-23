@@ -51,6 +51,7 @@ void Parser::show_tree( Tree_Node *root_node, string prefix ){
 void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
     // while token_list is not EMPTY
+    cout << "find_siblings" << endl;
     while( !token_list.empty() )
     {
         Tree_Node *node = new Tree_Node();
@@ -63,6 +64,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
         {
 
             case EOF:
+                cout << "find_siblings - case EOF" << endl;
                 token_list.clear();
                 break;
 
@@ -71,22 +73,23 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
             case RBRACE:
             case SEMI:
             {
+                cout << "find_siblings - case COMMA|RBRACKET|RBRACE|SEMI" << endl;
                 break;
             }
 
             case INT:
             {
+                cout << "find_siblings - case INT" << endl;
                 node->nodeType = VARIABLE;
                 node->typeSpecifier = INT;
             }
 
             case VOID:
             {
-                cout << "CASE: VOID\n";
+                cout << "find_siblings - case VOID" << endl;
                 node->typeSpecifier = first_token->type;
                 if( !token_list.empty() )
                 {
-                    cout << "\tTOKENLIST NOT EMPTY\n";
                     // pop second_token off of token_list and switch on its type
                     cout << "Tokenlist size: " << token_list.size() << endl;
                     cout << "Token type: " << token_list.at(45) << endl;
@@ -100,7 +103,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
                         case ID:
                         {
-                            cout << "\t\tCASE: ID\n";
+                            cout << "find_siblings - case VOID - case ID" << endl;
                             node->sValue = second_token->value;
                             cout << "Got second token\n";
                             if( !token_list.empty() )
@@ -114,7 +117,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
                                     case LBRACKET:
                                     {
-                                        cout << "\t\t\tCASE: LBRACKET\n";
+                                        cout << "find_siblings - case VOID - case ID - case LBRACKET" << endl;
                                         // pop fourth_token off of token_list and switch on its type
                                         node->nodeType = ARRAY;
                                         Token *fourth_token = new Token(token_list.front()->type,token_list.front()->value);
@@ -124,13 +127,14 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
                                             case NUMBER:
                                             {
-                                                cout << "\t\t\t\tCASE: NUMBER\n";
+                                                cout << "find_siblings - case VOID - case ID - case LBRACKET - case NUMBER" << endl;
                                                 node->nValue = std::stoi( fourth_token->value );
                                                 break;
                                             }
 
                                             case RBRACKET:
                                             {
+                                                cout << "find_siblings - case VOID - case ID - case LBRACKET - case RBRACKET" << endl;
                                                 break;
                                             }
 
@@ -148,7 +152,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                     // LPAREN ->
                                     case LPAREN:
                                     {
-                                        cout << "\t\t\tCASE: LPAREN\n";
+                                        cout << "find_siblings - case VOID - case ID - case LPAREN" << endl;
                                         // LPAREN means we are declaring a function
                                         node->nodeType = FUNCTION;
                                         node->C1 = new Tree_Node();
@@ -196,12 +200,14 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                             {
                                                 case LBRACE:
                                                 {
+                                                    cout << "find_siblings - case VOID - case ID - case LPAREN - case LBRACE" << endl;
                                                     num_of_open_braces += 1;
                                                     break;
                                                 }
 
                                                 case RBRACE:
                                                 {
+                                                    cout << "find_siblings - case VOID - case ID - case LPAREN - case LBRACE" << endl;
                                                     num_of_closed_braces += 1;
                                                     break;
                                                 }
@@ -235,6 +241,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                     case COMMA:
                                     case SEMI:
                                     {
+                                        cout << "find_siblings - case VOID - case ID - case RPAREN|COMMA|SEMI" << endl;
                                         root_node->sibling = node;
                                         root_node = node;
                                         break;
@@ -269,6 +276,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
             case ID:
             {
+                cout << "find_siblings - case ID" << endl;
                 break;
             }
 
@@ -286,6 +294,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
 void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
 
+    cout << "find_arguments" << endl;
     while( !token_list.empty() )
     {
         Tree_Node *node;
@@ -296,6 +305,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
 
             case NUMBER:
             {
+                cout << "find_arguments - case NUMBER" << endl;
                 if( token_list.empty() )
                 {
                     node->nodeType = NUMBER;
@@ -311,6 +321,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
 
                         case COMMA:
                         {
+                            cout << "find_arguments - case NUMBER - case COMMA" << endl;
                             node->nodeType = NUMBER;
                             node->typeSpecifier = INT;
                             node->nValue = std::stoi( first_token->value );
@@ -329,6 +340,7 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
 
             case ID:
             {
+                cout << "find_arguments - case ID" << endl;
                 if( token_list.empty() )
                 {
                     node->nodeType = VARIABLE;
@@ -370,6 +382,8 @@ void Parser::find_arguments(Tree_Node *root_node, vector<Token*> token_list ){
 
 
 void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<Token*> token_list ){
+
+    cout << "find_expression" << endl;
     Tree_Node *node = new Tree_Node();
     while( !token_list.empty() )
     {
@@ -388,6 +402,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
             case NUMBER:
             {
+                cout << "find_expression - case NUMBER" << endl;
                 node->C1->nodeType = NUMBER;
                 node->C1->typeSpecifier = INT;
                 node->C1->nValue = std::stoi( first_token->value );
@@ -395,6 +410,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
             }
 
             case ID:
+                cout << "find_expression - case ID" << endl;
                 node->C1->nodeType = VARIABLE;
                 if( !token_list.empty() )
                 {
@@ -405,6 +421,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                         case LBRACKET:
                         {
+                            cout << "find_expression - case NUMBER - case LBRACKET" << endl;
                             node->C1->nodeType = ARRAY;
                             Token *third_token = new Token(token_list.front()->type,token_list.front()->value);
                             token_list.erase( token_list.begin() );
@@ -413,6 +430,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                 case INT:
                                 {
+                                    cout << "find_expression - case NUMBER - case LBRACKET - case INT" << endl;
                                     node->C1->nValue = std::stoi( third_token->value );
                                     token_list.erase( token_list.begin() );
                                     break;
@@ -420,6 +438,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                 case ID:
                                 {
+                                    cout << "find_expression - case NUMBER - case LBRACKET - case ID" << endl;
                                     vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
                                     vector<Token*> passed_list;
                                     int start, end;
@@ -446,6 +465,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                         case MINUS:
                         {
+                            cout << "find_expression - case NUMBER - case MINUS" << endl;
                             node->nodeType = MINUS;
                             node->C2 = new Tree_Node();
                             vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_MINUS );
@@ -457,6 +477,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                         case LS:
                         {
+                            cout << "find_expression - case NUMBER - case LS" << endl;
                             node->nodeType = LS;
                             node->C2 = new Tree_Node();
                             vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
@@ -468,6 +489,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                         case ASSIGN:
                         {
+                            cout << "find_expression - case NUMBER - case ASSIGN" << endl;
                             Token *third_token = new Token(token_list.front()->type,token_list.front()->value);
                             token_list.erase( token_list.begin() );
                             switch( third_token->type )
@@ -475,6 +497,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                 case NUMBER:
                                 {
+                                    cout << "find_expression - case NUMBER - case ASSIGN - case NUMBER" << endl;
                                     node->nodeType = ASSIGN;
                                     node->C2 = new Tree_Node();
                                     node->C2->nodeType = NUMBER;
@@ -485,6 +508,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                 case ID:
                                 {
+                                    cout << "find_expression - case NUMBER - case ASSIGN - case ID" << endl;
                                     node->C2 = new Tree_Node();
                                     if ( token_list.empty() )
                                     {
@@ -500,6 +524,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                             case LPAREN:
                                             {
+                                                cout << "find_expression - case NUMBER - case ASSIGN - case ID - case LPAREN" << endl;
                                                 node->C2->nodeType = CALL;
                                                 node->C2->sValue = third_token->value;
                                                 node->C2->typeSpecifier = INT;
@@ -520,6 +545,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                             case SEMI:
                                             {
+                                                cout << "find_expression - case NUMBER - case ASSIGN - case ID - case SEMI" << endl;
                                                 node->C2->nodeType = VARIABLE;
                                                 node->C2->sValue = third_token->value;
                                                 break;
@@ -527,6 +553,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                             case LBRACKET:
                                             {
+                                                cout << "find_expression - case NUMBER - case ASSIGN - case ID - case LBRACKET" << endl;
                                                 node->C2->nodeType = ARRAY;
                                                 node->C2->sValue = third_token->value;
                                                 node->C2->C1 = new Tree_Node();
@@ -546,6 +573,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
                                             case PLUS:
                                             {
+                                                cout << "find_expression - case NUMBER - case ASSIGN - case ID - case PLUS" << endl;
                                                 node->C2->nodeType = PLUS;
                                                 node->C2->C1 = node;
                                                 Tree_Node *temp_node = node->C2;
@@ -625,6 +653,7 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
 
 void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> token_list ){
 
+    cout << "find_statement_list_siblings" << endl;
     while( !token_list.empty() )
     {
         Tree_Node *node = new Tree_Node();
@@ -635,6 +664,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
             case WRITE:
             {
+                cout << "find_statement_list_siblings - case WRITE" << endl;
                 node->nodeType = WRITE;
                 vector<Token*>::iterator close_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
                 vector<Token*> passed_list;
@@ -654,6 +684,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
             case READ:
             {
+                cout << "find_statement_list_siblings - case READ" << endl;
                 node->nodeType = READ;
                 Token *second_token = new Token(token_list.front()->type,token_list.front()->value);
                 token_list.erase( token_list.begin() );
@@ -662,6 +693,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
                     case ID:
                     {
+                        cout << "find_statement_list_siblings - case READ - case ID" << endl;
                         Token *third_token = new Token(token_list.front()->type,token_list.front()->value);
                         token_list.erase( token_list.begin() );
                         node->C1 = new Tree_Node();
@@ -670,6 +702,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
                             case ID:
                             {
+                                cout << "find_statement_list_siblings - case READ - case ID - case ID" << endl;
                                 node->C1->nodeType = VARIABLE;
                                 node->C1->nValue = std::stoi( second_token->value );
                                 break;
@@ -677,6 +710,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
                             case LBRACKET:
                             {
+                                cout << "find_statement_list_siblings - case READ - case ID - case ID" << endl;
                                 node->C1->nodeType = ARRAY;
                                 node->C1->sValue = second_token->value;
                                 vector<Token*>::iterator close_bracket = std::find_if( token_list.begin(), token_list.end(), IS_RBRACKET );
@@ -712,6 +746,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
             case INT:
             {
+                cout << "find_statement_list_siblings - case INT" << endl;
                 vector<Token*> new_token_list;
                 new_token_list.insert( new_token_list.begin(), first_token );
                 std::copy( token_list.begin(), token_list.end(), (new_token_list.begin() + 1) );
@@ -732,6 +767,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
             case RETURN:
             {
+                cout << "find_statement_list_siblings - case RETURN" << endl;
                 node->nodeType = RETURN;
                 node->C1 = new Tree_Node();
                 vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
@@ -750,6 +786,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
             case IF:
             {
+                cout << "find_statement_list_siblings - case IF" << endl;
                 node->nodeType = IF;
                 node->C1 = new Tree_Node();
                 vector<Token*>::iterator close_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
@@ -795,12 +832,14 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
             case ID:
             {
+                cout << "find_statement_list_siblings - case ID" << endl;
                 Token *second_token = new Token(token_list.front()->type,token_list.front()->value);
                 token_list.erase( token_list.begin() );
                 switch( second_token->type )
                 {
                     case LBRACKET:
                     {
+                        cout << "find_statement_list_siblings - case ID - case LBRACKET" << endl;
                         node->nodeType = EXPRESSION;
                         vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
                         vector<Token*> passed_list;
@@ -817,6 +856,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
                     case ASSIGN:
                     {
+                        cout << "find_statement_list_siblings - case ID - case ASSIGN" << endl;
                         node->nodeType = ASSIGN;
                         node->C1 = new Tree_Node();
                         node->C1->nodeType = VARIABLE;
@@ -838,6 +878,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
                     case LPAREN:
                     {
+                        cout << "find_statement_list_siblings - case ID - case LPAREN" << endl;
                         token_list.erase( token_list.begin() );
                         node->nodeType = CALL;
                         node->sValue = first_token->value;
@@ -868,12 +909,15 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
             case CALL:
             {
+
+                cout << "find_statement_list_siblings - case CALL" << endl;
                 node->nodeType = CALL;
                 break;
             }
 
             case WHILE:
             {
+                cout << "find_statement_list_siblings - case WHILE" << endl;
                 node->nodeType = WHILE;
                 node->C1 = new Tree_Node();
                 node->C1->nodeType = EXPRESSION;
@@ -911,12 +955,14 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
                         case LBRACE:
                         {
+                            cout << "find_statement_list_siblings - case WHILE - case LBRACE" << endl;
                             num_of_open_braces++;
                             break;
                         }
 
                         case RBRACE:
                         {
+                            cout << "find_statement_list_siblings - case WHILE - case RBRACE" << endl;
                             num_of_closed_braces++;
                             break;
                         }
@@ -966,32 +1012,34 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
 void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
-    cout << "In build subtree\n";
+    cout << "build_subtree" << endl;
     cout << "Root node: " << root_node->nodeType << endl;
     switch( root_node->nodeType )
     {
 
         case PROGRAM:
         {
-	    cout << "In PROGRAM" << endl;
-	    find_siblings( root_node, token_list);
+            cout << "build_subtree - case PROGRAM" << endl;
+            find_siblings( root_node, token_list);
             break;
         }
 
         case PARAMETER_LIST:
         {
-            cout << "In PARAMETER LIST" << endl;
-	        Tree_Node *node;
+            cout << "build_subtree - case PARAMETER_LIST" << endl;
+            Tree_Node *node;
             node = root_node;
             switch( node->typeSpecifier )
             {
                 case VOID:
                 {
+                    cout << "build_subtree - case PARAMETER_LIST - case VOID" << endl;
                     break;
                 }
 
                 case INT:
                 {
+                    cout << "build_subtree - case PARAMETER_LIST - case VOID" << endl;
                     find_siblings( node, token_list );
                     break;
                 }
@@ -1006,8 +1054,8 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
         case COMPOUND:
         {
-            cout << "In COMPOUND" << endl;
-	        root_node->C1 = new Tree_Node();
+            cout << "build_subtree - case COMPOUND" << endl;
+            root_node->C1 = new Tree_Node();
             root_node->C1->nodeType = DECLARATION;
             bool keep_going = true;
             vector<Token*>::iterator index = token_list.begin();
@@ -1020,6 +1068,7 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
                 {
                     case INT:
                     {
+                        cout << "build_subtree - case COMPOUND - case INT" << endl;
                         // assume declarations of form "int i" and not "int i = 0;"
                         std::advance( index, 3 );
                         break;
@@ -1055,8 +1104,8 @@ void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
         case STATEMENT_LIST:
         {
-            cout << "In STATEMENT_LIST" << endl;
-	        find_statement_list_siblings( root_node, token_list );
+            cout << "build_subtree - case STATEMENT_LIST" << endl;
+            find_statement_list_siblings( root_node, token_list );
             break;
         }
 
