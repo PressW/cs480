@@ -53,12 +53,12 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
     // while token_list is not EMPTY
     while( !token_list.empty() )
     {
-        Tree_Node *node;
+        Tree_Node *node = new Tree_Node();
 
         // pop first_token off of token_list and switch on its type
         Token *first_token = token_list.at( 0 );
         token_list.erase( token_list.begin() );
-	cout << "Before switch statement" << endl;
+	    
         switch( first_token->type )
         {
 
@@ -82,20 +82,26 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
             case VOID:
             {
+                cout << "CASE: VOID\n";
                 node->typeSpecifier = first_token->type;
                 if( !token_list.empty() )
                 {
+                    cout << "\tTOKENLIST NOT EMPTY\n";
                     // pop second_token off of token_list and switch on its type
-                    Token *second_token = token_list.at( 0 );
+                    Token *second_token = new Token(token_list.front()->type,token_list.front()->value);
                     token_list.erase( token_list.begin() );
+                    cout << "\t\tSwitch\n" << second_token->type << "^^^\n";
                     switch( second_token->type )
                     {
 
                         case ID:
                         {
+                            cout << "\t\tCASE: ID\n";
                             node->sValue = second_token->value;
+                            cout << "Got second token\n";
                             if( !token_list.empty() )
                             {
+                                cout << "\t\tToken list not empty\n";
                                 // pop third_token off of token_list and switch on its type
                                 Token *third_token = token_list.at( 0 );
                                 token_list.erase( token_list.begin() );
@@ -103,7 +109,8 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                 {
 
                                     case LBRACKET:
-                                    {
+                                    {   
+                                        cout << "\t\t\tCASE: LBRACKET\n";
                                         // pop fourth_token off of token_list and switch on its type
                                         node->nodeType = ARRAY;
                                         Token *fourth_token = token_list.at( 0 );
@@ -113,6 +120,7 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
 
                                             case NUMBER:
                                             {
+                                                cout << "\t\t\t\tCASE: NUMBER\n";
                                                 node->nValue = std::stoi( fourth_token->value );
                                                 break;
                                             }
@@ -136,12 +144,14 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                     // LPAREN ->
                                     case LPAREN:
                                     {
+                                        cout << "\t\t\tCASE: LPAREN\n";
                                         // LPAREN means we are declaring a function
                                         node->nodeType = FUNCTION;
                                         node->C1 = new Tree_Node();
                                         node->C1->nodeType = PARAMETER_LIST;
                                         // Get iterator pointing to first instance of RPAREN
                                         vector<Token*>::iterator right_paren = std::find_if( token_list.begin(), token_list.end(), IS_RPAREN );
+                                        
                                         if ( right_paren == token_list.end() )
                                         {
                                             node->C1->typeSpecifier = VOID;
@@ -150,7 +160,13 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                         {
                                             node->C1->typeSpecifier = INT;
                                             vector<Token*> passed_list;
+                                            for (int i = 0; i < token_list.size(); ++i){
+                                                passed_list.push_back(0);
+                                            }
+                                            //passed_list.clear();
+                                            cout << "move\n";
                                             std::move( token_list.begin(), right_paren, passed_list.begin() );
+                                            cout << "subtree\n";
                                             build_subtree( node->C1, passed_list );
                                         }
                                         node->C2 = new Tree_Node();
@@ -223,8 +239,10 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                             }
                             else
                             {
+                                cout << "Token list was empty\n";
                                 root_node->sibling = node;
                                 root_node = node;
+                                cout << "Assigned!\n";
                             }
                             break;
                         }
