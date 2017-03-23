@@ -36,6 +36,8 @@ Scanner::Scanner(string filename){
                 case '\t':
                     token_string = trim(token_string);
                     if (!token_string.empty()){
+                                            
+
                         tokens.push_back(stringToToken(token_string));
                         token_string = "";
                     }
@@ -100,10 +102,6 @@ Scanner::Scanner(string filename){
                     token_string = "";
                     break;
                 case '=':
-                    if (token_string != "="){
-                        tokens.push_back(stringToToken(token_string.substr(0,token_string.length() - 1)));
-                        token_string = "=";
-                    }
                     tokens.push_back(stringToToken(token_string));
                     token_string = "";
                     break;
