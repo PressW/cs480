@@ -844,40 +844,95 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
 
 void Parser::build_subtree(Tree_Node *root_node, vector<Token*> token_list ){
 
-    // switch on root_node.type
-        // PROGRAM -->
-            // call find_siblings(root_node, token_list)
-            // break
-        // PARAMETER_LIST
-            // create new node
-            // set node to root_node
-            // switch on node.typeSpecifier
-                // VOID -> break;
-                // INT -> call find_siblings(root_node, token_list); break
-                // default -> error out on unhandled node.typeSpecifier; exit
-            // break
-        // COMPOUND ->
-            // create root_node.C1 child
-            // set root_node.C1.nodeType to DECLARATION
-                // set keep_going to TRUE
-                // set index to 0
-                // do
-                    // get token at index of token_list
-                    // switch on token.type
-                        // INT -> index += 3; break
-                        // default -> set keep_going to FALSE; break
-                // while keep_going
-                // if index > 0
-                    // call find_siblings(root_node.C1, token_list(from - to index))
-                    // set token_list to token_list(from index+1 to end of token_list)
-            // create root_node.C2 child nodeType
-            // set root_node.C2.nodeType to STATEMENT_LIST
-            // call build_subtree(root_node.C2, token_list)
-            // break
-        // STATEMENT_LIST ->
-            // call find_statement_list_siblings(root_node, token_list)
-            // break
-        // default -> error out on unhandled root_node.nodeType; exit
+
+    switch( root_node->type )
+    {
+
+        case PROGRAM:
+        {
+            find_siblings( root_node, token_list);
+            break;
+        }
+
+        case PARAMETER_LIST:
+        {
+            Tree_Node node = new Tree_Node();
+            node = &root_node;
+            switch( node->typeSpecifier )
+            {
+                case VOID:
+                {
+                    break;
+                }
+
+                case INT:
+                {
+                    find_siblings( node, token_list );
+                    break;
+                }
+
+                default:
+                {
+                    cerr << "ERROR: Unhandled node typeSpecifier: " << node->typeSpecifier << endl;
+                    exit(-1);
+                }
+            }
+        }
+
+        case COMPOUD:
+        {
+            root_node->C1 = new Tree_Node();
+            root_node->C1->nodeType = DECLARATION;
+            bool keep_going = TRUE;
+            vector<Token*>::iterator index = token_list.begin();
+            int position;
+            do
+            {
+                position = std::distance( token_list.begin(), index );
+                Token *token = token_list.at( position );
+                switch ( token->type )
+                {
+                    case INT:
+                    {
+                        // assume declarations of form "int i" and not "int i = 0;"
+                        std::advance( index, 3 );
+                        break;
+                    }
+
+                    default:
+                    {
+                        keep_going = FALSE;
+                        break;
+                    }
+                }
+            }
+            while( keep_going );
+
+            if( index != token_list.begin() )
+            {
+                vector<Token*> passed_list;
+                std::move( token_list.begin(), index, passed_list.begin() );
+                find_siblings( root_node->C1, passed_list);
+            }
+
+            root->C2 = new Tree_Node();
+            root->C2->nodeType = STATEMENT_LIST;
+            build_subtree( root_node->C2, token_list );
+            break;
+        }
+
+        case STATEMENT_LIST:
+        {
+            find_statement_list_siblings( root_node, token_list );
+            break;
+        }
+
+        default:
+        {
+            cerr << "ERROR: Unhandled root_node nodeType: " << root_node->nodeType << endl;
+            exit(-1);
+        }
+    }
 }
 
 bool IS_RPAREN(Token *t){
