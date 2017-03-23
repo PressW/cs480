@@ -14,7 +14,7 @@ class Token {
 		Token(int type);
 		Token(int type, string value);
 		string toStr();
-		bool operator==(Token t);
+		bool operator==(Token *t);
 		~Token();
 
 	private:

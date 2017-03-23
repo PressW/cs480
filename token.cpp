@@ -12,8 +12,8 @@ Token::Token(int type, string value){
 string Token::toStr(){
     return this->value;
 }
-bool Token::operator==(Token t){
-    if (this->type == t.type && this->value == t.value){
+bool Token::operator==(Token *t){
+    if (this->type == t->type && this->value == t->value){
         return true;
     }
     else {
