@@ -173,15 +173,18 @@ void Parser::find_siblings( Tree_Node *root_node, vector<Token*> token_list ){
                                             for (int i = start; i < end; ++i){
                                                 passed_list.push_back(NULL);
                                             }
-                                            for (int j = 0; j < token_list.size(); ){
+                                            for (int j = 0; j < 5; j++){
                                                 cout << "before token_list[" << j << "]: " << token_list.at(j)->value << endl;
                                             }
                                             std::move( token_list.begin(), right_paren, passed_list.begin() );
-                                            for (int j = 0; j < token_list.size(); ){
+                                            token_list.erase( token_list.begin() );
+                                            for (int j = 0; j < 5; j++){
                                                 cout << "after token_list[" << j << "]: " << token_list.at(j)->value << endl;
                                             }
                                             build_subtree( node->C1, passed_list );
-
+                                            for (int j = 0; j < 5; j++){
+                                                cout << "completed token_list[" << j << "]: " << token_list.at(j)->value << endl;
+                                            }
                                         }
                                         node->C2 = new Tree_Node();
                                         node->C2->nodeType = COMPOUND;
