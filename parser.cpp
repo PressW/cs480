@@ -510,6 +510,18 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
                             node->C2 = node->C2->sibling;
                             break;
                         }
+                            
+                        case NEQ:
+                        {
+                            cout << "find_expression - case ID - case NEQ" << endl;
+                            node->nodeType = NEQ;
+                            node->C2 = new Tree_Node();
+                            vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_SEMI );
+                            find_expression(NULL, node->C2, token_list);
+                            token_list.erase( token_list.begin(), index );
+                            node->C2 = node->C2->sibling;
+                            break;
+                        }
 
                         case ASSIGN:
                         {
@@ -759,7 +771,7 @@ void Parser::find_statement_list_siblings(Tree_Node *root_node, vector<Token*> t
                                 
                             case SEMI:
                             {
-                                cout << "find_siblings - case COMMA|RBRACKET|RBRACE|SEMI" << endl;
+                                cout << "find_siblings - case SEMI" << endl;
                                 break;
                             }
 
@@ -1192,6 +1204,9 @@ bool IS_SEMI(Token *t){
 }
 bool IS_MINUS(Token *t){
     return (t->type == MINUS);
+}
+bool IS_NEQ(Token *t){
+    return (t->type == NEQ);
 }
 bool IS_RBRACKET(Token *t){
     return (t->type == RBRACKET);
