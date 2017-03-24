@@ -429,7 +429,29 @@ void Parser::find_expression(Token *first_token, Tree_Node *root_node, vector<To
                 node->C1->nodeType = NUMBER;
                 node->C1->typeSpecifier = INT;
                 node->C1->nValue = std::stoi( first_token->value );
-                break;
+                //break;
+                
+                if( !token_list.empty() )
+                {
+                    Token *second_token = new Token(token_list.front()->type,token_list.front()->value);
+                    token_list.erase( token_list.begin() );
+                    switch (second_token-> type)
+                    {
+                    
+                    case MULT:
+                        {
+                            cout << "find_expression - case NUMBER - case MULT" << endl;
+                            node->nodeType = MULT;
+                            node->C2 = new Tree_Node();
+                            vector<Token*>::iterator index = std::find_if( token_list.begin(), token_list.end(), IS_MULT );
+                            find_expression(NULL, node->C2, token_list);
+                            token_list.erase( token_list.begin(), index );
+                            node->C2 = node->C2->sibling;
+                            break;
+                        }
+                    }
+                    break;
+                }
             }
 
             case ID:
